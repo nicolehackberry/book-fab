@@ -9,7 +9,7 @@ interface IFavoritesScreen {
 const FavoritesScreen: FC<IFavoritesScreen> = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Text>Home Screen</Text>
+            <Text>Favorites Screen</Text>
             <Button  title='Press Me!' onPress={() => { navigation.navigate('HomeScreen') }}/>
         </View>
     );
@@ -22,6 +22,6 @@ const styles = StyleSheet.create({
         padding: 15,
         justifyContent: 'center',
         height: 500,
-        backgroundColor: 'purple',
+        backgroundColor: 'yellow',
     }
 })
