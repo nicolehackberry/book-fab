@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 const WelcomeScreen: FC = () => {
     return (
-        <view style={styles.container}>
-            <title>Welcome Screen</title>
-        </view>
+        <View style={styles.container}>
+            <Text>Welcome Screen</Text>
+        </View>
     );
 };
 
