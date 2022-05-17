@@ -52,7 +52,7 @@ function TabsNavigator() {
                 iconName = focused ? 'user' : 'user-o';
                 return <Icon name={iconName} size={24} color={primaryColor} />
             }
-            return <TabIcon name={iconName} size={16} color={primaryColor} />
+            return <TabIcon name={iconName} size={24} color={primaryColor} />
         }
     })}>
         <Tabs.Screen options={{headerShown: false}} name="HomeScreen" component={HomeScreen} />
