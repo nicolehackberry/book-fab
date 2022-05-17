@@ -1,10 +1,16 @@
 import React, { FC } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
+import {NativeStackNavigationProp} from "react-native-screens/native-stack";
 
-const HomeScreen: FC = () => {
+interface IHomeScreen {
+    navigation: NativeStackNavigationProp<any, any>,
+}
+
+const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Text>Home Screen</Text>
+            <Button  title='Press Me!' onPress={() => { navigation.navigate('HomeScreen') }}/>
         </View>
     );
 };

@@ -11,8 +11,6 @@ import { StackScreens } from "../helpers/types";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 
-
-
 export function AppNavigator() {
     const navigationRef = useNavigationContainerRef();
 
