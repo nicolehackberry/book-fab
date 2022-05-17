@@ -4,12 +4,19 @@ import {
   useNavigationContainerRef,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import HomeScreen from "../screens/HomeScreen";
-import { StackScreens } from "../helpers/types";
+import { StackScreens, TabsScreens } from "../helpers/types";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
+const Tab = createBottomTabNavigator<TabsScreens>();
+
+
+function TabsNavigator() {
+
+}
 
 export function AppNavigator() {
     const navigationRef = useNavigationContainerRef();
