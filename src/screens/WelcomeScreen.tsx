@@ -9,13 +9,40 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
+interface IButton {
+    label: string;
+    callback: () => void;
+}
+
+const ContinueBtn: FC<IButton> = ({ label, callback }) => {
+  <Icon name={'home'} size={24} color={'black'} />;
+
+  return (
+    <TouchableOpacity
+      style={styles.continueBtn}
+      onPress={callback}
+    >
+      <Text>{label}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
+  const btnText = "Contiunue";
+
+  const btnAction = () => {
+    console.log('Btn actionnn');
+      
+    navigation.push("HomeScreen");
+  }
 
   return (
     <View style={containerStyle(height, width).container}>
@@ -29,14 +56,10 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
           style={styles.gradient}
         >
           <View style={styles.container}>
-            <TouchableOpacity
-              style={styles.continueBtn}
-              onPress={() => {
-                navigation.push("HomeScreen");
-              }}
-            >
-              <Text>Presss me!</Text>
-            </TouchableOpacity>
+
+              <ContinueBtn label={btnText} callback={btnAction}/>
+
+
           </View>
         </LinearGradient>
       </ImageBackground>
@@ -75,7 +98,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: '30%'
+    marginBottom: "30%",
   },
   text: {
     color: "white",
