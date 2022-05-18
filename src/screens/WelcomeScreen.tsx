@@ -3,11 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
+  TouchableOpacity,
   Dimensions,
-  Image,
   ImageBackground,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 interface IWelcomeScreen {
@@ -18,36 +18,67 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={containerStyle(height, width).container}>
       <ImageBackground
-        resizeMode={"cover"} // or cover
-        style={{ flex: 1 }} // must be passed from the parent, the number may vary depending upon your screen size
+        resizeMode={"cover"}
+        style={styles.image}
         source={require("../assets/model.jpg")}
       >
-        <Button
-          title="Press Me!"
-          onPress={() => {
-            navigation.push("HomeScreen");
-          }}
-        />
+        <LinearGradient
+          colors={["#00000000", "#000000"]}
+          style={styles.gradient}
+        >
+          <TouchableOpacity
+            style={styles.continueBtn}
+            onPress={() => {
+              navigation.push("HomeScreen");
+            }}>
+                <Text>Presss me!</Text>
+            </TouchableOpacity>
+        </LinearGradient>
       </ImageBackground>
-      <Button
-        title="Press Me!"
-        onPress={() => {
-          navigation.push("HomeScreen");
-        }}
-      />
     </View>
   );
 };
 
 export default WelcomeScreen;
 
+const containerStyle = (height: number, width: number) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      flexDirection: "column",
+      height: height,
+      width: width,
+    },
+  });
+
 const styles = StyleSheet.create({
-  container: {
-    padding: 15,
+  image: {
+    flex: 1,
+    resizeMode: "cover",
     justifyContent: "center",
-    height: 500,
-    backgroundColor: "pink",
+    height: "100%",
+    width: "100%",
   },
+  gradient: {
+      height: '100%',
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+  text: {
+    color: "white",
+    fontSize: 42,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#000000a0",
+  },
+  continueBtn: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '80%',
+      height: 36,
+      backgroundColor: 'pink'
+  }
 });
