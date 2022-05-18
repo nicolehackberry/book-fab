@@ -76,13 +76,13 @@ export function AppNavigator() {
           <RootStack.Screen
             name={"WelcomeScreen"}
             component={WelcomeScreen}
-            options={{ title: "Welcome Screenooo" }}
+            options={{ headerShown: false }}
           />
 
           <RootStack.Screen
             name={"HomeScreen"}
             component={TabsNavigator}
-            options={{ title: "HOME Screenooo" }}
+            options={{ title: 'tralöalalala' }}
           />
         </>
       </RootStack.Navigator>
