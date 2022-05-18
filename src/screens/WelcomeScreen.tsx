@@ -9,27 +9,24 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import Icon from "react-native-vector-icons/FontAwesome";
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
 interface IButton {
-    label: string;
-    callback: () => void;
+  label: string;
+  callback: () => void;
 }
 
 const ContinueBtn: FC<IButton> = ({ label, callback }) => {
-  <Icon name={'home'} size={24} color={'black'} />;
-
   return (
-    <TouchableOpacity
-      style={styles.continueBtn}
-      onPress={callback}
-    >
-      <Text>{label}</Text>
+    <TouchableOpacity style={styles.continueBtn} onPress={callback}>
+      <View style={styles.test}>
+        <Text style={styles.text}>{label}</Text>
+        <Icon name={"angle-right"} size={24} color={"white"} />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -38,11 +35,9 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
   const btnText = "Contiunue";
 
-  const btnAction = () => {
-    console.log('Btn actionnn');
-      
+  const continueBtn = () => {
     navigation.push("HomeScreen");
-  }
+  };
 
   return (
     <View style={containerStyle(height, width).container}>
@@ -56,10 +51,7 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
           style={styles.gradient}
         >
           <View style={styles.container}>
-
-              <ContinueBtn label={btnText} callback={btnAction}/>
-
-
+            <ContinueBtn label={btnText} callback={continueBtn} />
           </View>
         </LinearGradient>
       </ImageBackground>
@@ -101,18 +93,23 @@ const styles = StyleSheet.create({
     marginBottom: "30%",
   },
   text: {
-    color: "white",
-    fontSize: 42,
+    color: "#FFFF",
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
-    backgroundColor: "#000000a0",
+    opacity: 1.0,
   },
   continueBtn: {
     alignItems: "center",
     justifyContent: "center",
     width: "80%",
     height: 36,
-    backgroundColor: "pink",
+    backgroundColor: "rgba(255, 100, 127, 0.17)",
     borderRadius: 10,
   },
+  test:{
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 16
+  }
 });
