@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -10,6 +10,11 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import Icon from "react-native-vector-icons/FontAwesome";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  PinyonScript_400Regular,
+} from "@expo-google-fonts/pinyon-script";
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
@@ -34,29 +39,44 @@ const ContinueBtn: FC<IButton> = ({ label, callback }) => {
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
   const btnText = "Contiunue";
+  let [fontsLoaded] = useFonts({
+    PinyonScript_400Regular,
+  });
+
+  let fontSize = 24;
+  let paddingVertical = 8;
 
   const continueBtn = () => {
     navigation.push("HomeScreen");
   };
 
-  return (
-    <View style={containerStyle(height, width).container}>
-      <ImageBackground
-        resizeMode={"cover"}
-        style={styles.image}
-        source={require("../assets/model.jpg")}
-      >
-        <LinearGradient
-          colors={["#00000000", "#000000"]}
-          style={styles.gradient}
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <View style={containerStyle(height, width).container}>
+        <ImageBackground
+          resizeMode={"cover"}
+          style={styles.image}
+          source={require("../assets/model.jpg")}
         >
-          <View style={styles.container}>
-            <ContinueBtn label={btnText} callback={continueBtn} />
-          </View>
-        </LinearGradient>
-      </ImageBackground>
-    </View>
-  );
+          <LinearGradient
+            colors={["#00000000", "#000000"]}
+            style={styles.gradient}
+          >
+            <View style={styles.container}>
+              <View style={styles.logoTextContainer}>
+                <Text style={styles.logoText}>Book</Text>
+                <Text style={styles.logoText}>Fab</Text>
+              </View>
+
+              <ContinueBtn label={btnText} callback={continueBtn} />
+            </View>
+          </LinearGradient>
+        </ImageBackground>
+      </View>
+    );
+  }
 };
 
 export default WelcomeScreen;
@@ -92,12 +112,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: "30%",
   },
+  logoTextContainer: {
+    justifyContent: "flex-start",
+    height: "80%",
+    width: "100%",
+  },
+  logoText: {
+    fontFamily: "PinyonScript_400Regular",
+    color: "#FFFF",
+    fontSize: 48,
+    fontWeight: "bold",
+    textAlign: "center",
+    opacity: 1.0,
+  },
   text: {
     color: "#FFFF",
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
     opacity: 1.0,
+    fontFamily: "Pinyon Script",
   },
   continueBtn: {
     alignItems: "center",
@@ -107,9 +141,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 100, 127, 0.17)",
     borderRadius: 10,
   },
-  test:{
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 16
-  }
+  test: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
 });
