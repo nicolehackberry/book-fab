@@ -28,13 +28,16 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
           colors={["#00000000", "#000000"]}
           style={styles.gradient}
         >
-          <TouchableOpacity
-            style={styles.continueBtn}
-            onPress={() => {
-              navigation.push("HomeScreen");
-            }}>
-                <Text>Presss me!</Text>
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.continueBtn}
+              onPress={() => {
+                navigation.push("HomeScreen");
+              }}
+            >
+              <Text>Presss me!</Text>
             </TouchableOpacity>
+          </View>
         </LinearGradient>
       </ImageBackground>
     </View>
@@ -62,10 +65,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   gradient: {
-      height: '100%',
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center'
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: '30%'
   },
   text: {
     color: "white",
@@ -75,10 +85,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000a0",
   },
   continueBtn: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '80%',
-      height: 36,
-      backgroundColor: 'pink'
-  }
+    alignItems: "center",
+    justifyContent: "center",
+    width: "80%",
+    height: 36,
+    backgroundColor: "pink",
+    borderRadius: 10,
+  },
 });
