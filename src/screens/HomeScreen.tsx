@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import {NativeStackNavigationProp} from "react-native-screens/native-stack";
+import IntroSlider from '../components/IntroSlider';
 
 interface IHomeScreen {
     navigation: NativeStackNavigationProp<any, any>,
@@ -9,6 +10,7 @@ interface IHomeScreen {
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
     return (
         <View style={styles.container}>
+            <IntroSlider />
             <Text>Home Screen</Text>
             <Button  title='Press Me!' onPress={() => { navigation.navigate('HomeScreen') }}/>
         </View>
