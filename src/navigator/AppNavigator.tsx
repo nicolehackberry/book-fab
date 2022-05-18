@@ -21,19 +21,22 @@ import { primaryColor } from "../utils/Colors";
 export const RootStack = createNativeStackNavigator<StackScreens>();
 const Tabs = createBottomTabNavigator<TabsScreens>();
 
-const defaultNavOptions = {
-    headerStyle: {
-      height: 85,
-      elevation: 0,
-      shadowColor: 'transparent'
-    },
-    headerBackTitle: 'Back',
-    headerTintColor: primaryColor,
-    headerHideShadow: true,
+const navOptions = {
+  headerStyle: { 
+    backgroundColor: 'white',
+    height: 85,
+    elevation: 0,
+    shadowColor: 'transparent'
+  },
+  headerBackTitle: 'Back',
+  headerTintColor: primaryColor,
+  gestureEnabled: false,
+  headerHideShadow: true,
+  headerMode: 'float',
     headerTitle: () => (
       <Text>Book Fab</Text>
     )
-  };
+};
 
 
 function TabsNavigator() {
@@ -68,7 +71,7 @@ export function AppNavigator() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <RootStack.Navigator screenOptions={defaultNavOptions} initialRouteName="WelcomeScreen">
+      <RootStack.Navigator screenOptions={navOptions} initialRouteName="WelcomeScreen">
         <>
           <RootStack.Screen
             name={"WelcomeScreen"}
