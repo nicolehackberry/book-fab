@@ -114,10 +114,12 @@ const styles = StyleSheet.create({
   },
   logoTextContainer: {
     justifyContent: "flex-start",
+    alignItems: 'center',
     height: "80%",
     width: "100%",
   },
   logoText: {
+    display: "flex",
     fontFamily: "PinyonScript_400Regular",
     color: "#FFFF",
     fontSize: 48,
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
   text: {
     color: "#FFFF",
     fontSize: 18,
+    paddingEnd: 32,
     fontWeight: "bold",
     textAlign: "center",
     opacity: 1.0,
@@ -144,6 +147,5 @@ const styles = StyleSheet.create({
   test: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16,
   },
 });
