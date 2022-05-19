@@ -1,50 +1,32 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
   Dimensions,
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
-import Icon from "react-native-vector-icons/FontAwesome";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
   PinyonScript_400Regular,
 } from "@expo-google-fonts/pinyon-script";
+import { ContinueBtn } from "../components/ContinueBtn";
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
-interface IButton {
-  label: string;
-  callback: () => void;
-}
-
-const ContinueBtn: FC<IButton> = ({ label, callback }) => {
-  return (
-    <TouchableOpacity style={styles.continueBtn} onPress={callback}>
-      <View style={styles.test}>
-        <Text style={styles.text}>{label}</Text>
-        <Icon name={"angle-right"} size={24} color={"white"} />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
   const btnText = "Contiunue";
+  const title = "Book";
+  const subTitle = "Fab";
   let [fontsLoaded] = useFonts({
     PinyonScript_400Regular,
   });
-
-  let fontSize = 24;
-  let paddingVertical = 8;
 
   const continueBtn = () => {
     navigation.push("HomeScreen");
@@ -66,8 +48,8 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
           >
             <View style={styles.container}>
               <View style={styles.logoTextContainer}>
-                <Text style={styles.logoText}>Book</Text>
-                <Text style={styles.logoText}>Fab</Text>
+                <Text style={styles.logoText}>{title}</Text>
+                <Text style={styles.logoText}>{subTitle}</Text>
               </View>
 
               <ContinueBtn label={btnText} callback={continueBtn} />
@@ -114,7 +96,7 @@ const styles = StyleSheet.create({
   },
   logoTextContainer: {
     justifyContent: "flex-start",
-    alignItems: 'center',
+    alignItems: "center",
     height: "80%",
     width: "100%",
   },
@@ -126,26 +108,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     opacity: 1.0,
-  },
-  text: {
-    color: "#FFFF",
-    fontSize: 18,
-    paddingEnd: 32,
-    fontWeight: "bold",
-    textAlign: "center",
-    opacity: 1.0,
-    fontFamily: "Pinyon Script",
-  },
-  continueBtn: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "80%",
-    height: 36,
-    backgroundColor: "rgba(255, 100, 127, 0.17)",
-    borderRadius: 10,
-  },
-  test: {
-    flexDirection: "row",
-    alignItems: "center",
   },
 });
