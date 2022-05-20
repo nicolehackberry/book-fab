@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -13,6 +13,8 @@ import {
   useFonts,
   PinyonScript_400Regular,
 } from "@expo-google-fonts/pinyon-script";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { ContinueBtn } from "../components/ContinueBtn";
 
 interface IWelcomeScreen {
@@ -21,6 +23,7 @@ interface IWelcomeScreen {
 
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const { width, height } = Dimensions.get("window");
+  const [firstTimeUserlogin, setFirstTimeUserLogin] = useState(true);
   const btnText = "Contiunue";
   const title = "Book";
   const subTitle = "Fab";
@@ -28,9 +31,28 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
     PinyonScript_400Regular,
   });
 
-  const continueBtn = () => {
-    navigation.push("HomeScreen");
+  const setFirstTimeUser = async (value: boolean) => {
+    console.log("Saving value: ", value);
+
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("@first_time_loggedin", jsonValue);
+    } catch (e) {
+      console.log("Error in saving to Async Storage: ", e);
+    }
   };
+
+  const continueBtn = () => {
+    navigation.push("TabsNavigator");
+  };
+
+  useEffect(() => {
+    if(!firstTimeUserlogin) {
+      console.log('TATATAG: ', firstTimeUserlogin);
+      
+      navigation.push("TabsNavigator");
+    };
+  },[firstTimeUserlogin]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -52,7 +74,8 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
                 <Text style={styles.logoText}>{subTitle}</Text>
               </View>
 
-              <ContinueBtn label={btnText} callback={continueBtn} />
+              <ContinueBtn label={btnText} callback={() => { setFirstTimeUser(false).then((response) => {console.log('Response: ', response);
+              }) }} />
             </View>
           </LinearGradient>
         </ImageBackground>

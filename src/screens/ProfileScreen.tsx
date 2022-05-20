@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
-import {NativeStackNavigationProp} from "react-native-screens/native-stack";
+import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 interface IProfileScreen {
     navigation: NativeStackNavigationProp<any, any>,
