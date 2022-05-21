@@ -20,6 +20,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import { primaryColor } from "../utils/Colors";
 import { RootState } from "../redux/store";
 import { viewedOnboarding } from "../redux/actions/localDataActions";
+import { LoadingScreen } from "../components/LoadingScreen";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 const Tabs = createBottomTabNavigator<TabsScreens>();
@@ -37,14 +38,6 @@ const navOptions = {
   headerHideShadow: true,
   headerMode: "float",
   headerTitle: () => <Text>Book Fab</Text>,
-};
-
-const LoadingScreen = () => {
-  return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color="gray" />
-    </View>
-  );
 };
 
 const Navigation = () => (
@@ -145,12 +138,3 @@ export function AppNavigator() {
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center"
-  }
-});
-
-
