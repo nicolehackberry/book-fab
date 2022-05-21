@@ -111,20 +111,15 @@ function TabsNavigator() {
 }
 
 export function AppNavigator() {
-  const navigationRef = useNavigationContainerRef();
   const dispatch = useDispatch();
+  const navigationRef = useNavigationContainerRef();
+  const viewOnboarding = useSelector((state: RootState) => state.localData.viewOnBoarding);
   const [loading, setLoading] = useState(true);
-  const [viewOnboarding, setViewOnboarding] = useState(false);
-  const TEST = useSelector((state: RootState) => state.localData.viewOnBoarding);
 
   const checkOnboarding = async () => {
     try {
       const value = await AsyncStorage.getItem('@viewedOnboarding');
       dispatch(viewedOnboarding(value != null ? JSON.parse(value) : false));
-      
-      if(value !== null) {
-        setViewOnboarding(true);
-      };
     } catch (error) {
       console.log('Error @checkOnboarding: ', error);
     } finally {
@@ -136,22 +131,12 @@ export function AppNavigator() {
     checkOnboarding();
   }, []);
 
-  useEffect(() => {
-    console.log('Lyssnar på VIEWONBOARDING: ', viewOnboarding);
-    
-  }, [viewOnboarding]);
-
-  useEffect(() => {
-    console.log('Lyssnar på redux value: ', TEST);
-    
-  }, [TEST])
-
   return (
     <NavigationContainer ref={navigationRef}>
 
           {loading ? (
             <Loading />
-          ) : TEST ? (
+          ) : viewOnboarding ? (
             <Navigation />
           ) : (
             <Welcome />
