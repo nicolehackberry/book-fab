@@ -16,10 +16,10 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
   const clearOnboarding = async () => {
     try {
-      await AsyncStorage.removeItem('@viewedOnboarding');
+      await AsyncStorage.removeItem("@viewedOnboarding");
       dispatch(viewedOnboarding(false));
     } catch (error) {
-      console.log('Error @removeItem: ', error);
+      console.log("Error @removeItem: ", error);
     };
   };
 

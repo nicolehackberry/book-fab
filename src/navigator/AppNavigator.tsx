@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 import {
   NavigationContainer,
@@ -41,7 +41,11 @@ const Navigation = () => (
 
 const Welcome = () => (
   <RootStack.Navigator screenOptions={navOptions}>
-    <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }}/>
+    <RootStack.Screen
+      name="WelcomeScreen"
+      component={WelcomeScreen}
+      options={{ headerShown: false }}
+    />
   </RootStack.Navigator>
 );
 
@@ -54,18 +58,17 @@ const Loading = () => (
 export function AppNavigator() {
   const dispatch = useDispatch();
   const navigationRef = useNavigationContainerRef();
-  const viewOnboarding = useSelector((state: RootState) => state.localData.viewOnBoarding);
-  const [loading, setLoading] = useState(true);
+  const viewOnboarding = useSelector(
+    (state: RootState) => state.localData.viewOnBoarding
+  );
 
   const checkOnboarding = async () => {
     try {
-      const value = await AsyncStorage.getItem('@viewedOnboarding');
+      const value = await AsyncStorage.getItem("@viewedOnboarding");
       dispatch(viewedOnboarding(value != null ? JSON.parse(value) : false));
     } catch (error) {
-      console.log('Error @checkOnboarding: ', error);
-    } finally {
-      setLoading(false);
-    };
+      console.log("Error @checkOnboarding: ", error);
+    }
   };
 
   useEffect(() => {
@@ -74,15 +77,7 @@ export function AppNavigator() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-
-          {loading ? (
-            <Loading />
-          ) : viewOnboarding ? (
-            <Navigation />
-          ) : (
-            <Welcome />
-          )}
-
+      {viewOnboarding ? <Navigation /> : <Welcome />}
     </NavigationContainer>
   );
-};
+}
