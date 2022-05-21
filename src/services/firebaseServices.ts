@@ -1,5 +1,5 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { setDoc, getDoc, doc, getFirestore, Unsubscribe as UnsubscribeFS, onSnapshot} from 'firebase/firestore';
+import { getFirestore, collection, getDocs, Firestore } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -12,24 +12,18 @@ const firebaseConfig = {
 };
 
 let app: FirebaseApp;
+let db: Firestore;
+
 export const fbInit = () => {
   app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
   console.log(app);
 };
 
-  export const getDataFromFS = async () => {
-    const db = getFirestore();
-    const docRefQuestions = doc(db, "creatorData", '17ep4DmrBPS7OsfcTjLd');
-    const docSnap = await getDoc(docRefQuestions);
-
-
-    if (docSnap.exists()) {
-        console.log("Firebase services data firebase Firestore: ", docSnap.data());
-
-        return docSnap.data();
-    } else {
-        console.log("NO SUCH DATA firebase Firestore!!");
-
-        return docSnap.data()
-    }
-}
+export const getData = async () => {
+const citiesCol = collection(db, 'creatorData');
+  const citySnapshot = await getDocs(citiesCol);
+  const cityList = citySnapshot.docs.map(doc => doc.data());
+  console.log('DATA: ', cityList);
+  
+};

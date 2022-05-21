@@ -12,7 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
 import { viewedOnboarding } from "../redux/actions/localDataActions";
-import { getDataFromFS } from "../services/firebaseServices";
+import { getData } from "../services/firebaseServices";
 
 const WelcomeScreen = () => {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const WelcomeScreen = () => {
   const subTitle = "Fab";
 
   useEffect(() => {
-    getDataFromFS();
+    getData();
   }, []);
 
 
