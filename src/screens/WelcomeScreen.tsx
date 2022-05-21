@@ -12,7 +12,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
 import { viewedOnboarding } from "../redux/actions/localDataActions";
-import { getData } from "../services/firebaseServices";
 
 const WelcomeScreen = () => {
   const dispatch = useDispatch();
@@ -21,11 +20,6 @@ const WelcomeScreen = () => {
   const btnText = "Contiunue";
   const title = "Book";
   const subTitle = "Fab";
-
-  useEffect(() => {
-    getData();
-  }, []);
-
 
   const continueBtn = async () => {
     try {

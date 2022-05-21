@@ -1,5 +1,17 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, Firestore } from 'firebase/firestore/lite';
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  Firestore,
+} from "firebase/firestore/lite";
+import { query, where } from "firebase/firestore";
+
+interface ICreatorsLocations {
+  id: string;
+  latitude: number;
+  longitude: number;
+}
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -17,13 +29,30 @@ let db: Firestore;
 export const fbInit = () => {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
-  console.log(app);
 };
 
-export const getData = async () => {
-const citiesCol = collection(db, 'creatorData');
-  const citySnapshot = await getDocs(citiesCol);
-  const cityList = citySnapshot.docs.map(doc => doc.data());
-  console.log('DATA: ', cityList);
-  
+export const getAllData = async () => {
+  const query = collection(db, "creatorData");
+  const dataSnapshot = await getDocs(query);
+  const dataList = dataSnapshot.docs.map((doc) => doc.data());
+  console.log("All data: ", dataList);
+};
+
+export const fetchLocations = async () => {
+  await getDocs(collection(db, "creatorData")).then((snapshot) => {
+    const locationData = [{}];
+    snapshot.docs.forEach((doc) => {
+      if (doc.exists()) {
+        let data = doc.data();
+        locationData.push({ ...data.userLocation });
+        console.log("Loggar???: ", locationData);
+
+        return locationData;
+      } else {
+        console.log("No such data: QUESTIONS2022!");
+
+        return locationData;
+      }
+    });
+  });
 };
