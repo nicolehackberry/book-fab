@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   StyleSheet,
   View,
@@ -8,21 +8,12 @@ import {
   ImageBackground,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { NativeStackNavigationProp } from "react-native-screens/native-stack";
-import {
-  useFonts,
-  PinyonScript_400Regular,
-} from "@expo-google-fonts/pinyon-script";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
 import { viewedOnboarding } from "../redux/actions/localDataActions";
 
-interface IWelcomeScreen {
-  navigation: NativeStackNavigationProp<any, any>;
-}
-
-const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
+const WelcomeScreen = () => {
   const dispatch = useDispatch();
   const { width, height } = Dimensions.get("window");
 
@@ -30,46 +21,38 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const title = "Book";
   const subTitle = "Fab";
 
-  let [fontsLoaded] = useFonts({
-    PinyonScript_400Regular,
-  });
-
   const continueBtn = async () => {
     try {
-      await AsyncStorage.setItem('@viewedOnboarding', 'true');
+      await AsyncStorage.setItem("@viewedOnboarding", "true");
       dispatch(viewedOnboarding(true));
     } catch (error) {
-      console.log('Error @setItem: ', error);
-    };
+      console.log("Error @setItem: ", error);
+    }
   };
 
-  if (!fontsLoaded) {
-    return <Text>...Loading</Text>;
-  } else {
-    return (
-      <View style={containerStyle(height, width).container}>
-        <ImageBackground
-          resizeMode={"cover"}
-          style={styles.image}
-          source={require("../assets/model.jpg")}
+  return (
+    <View style={containerStyle(height, width).container}>
+      <ImageBackground
+        resizeMode={"cover"}
+        style={styles.image}
+        source={require("../assets/model.jpg")}
+      >
+        <LinearGradient
+          colors={["#00000000", "#000000"]}
+          style={styles.gradient}
         >
-          <LinearGradient
-            colors={["#00000000", "#000000"]}
-            style={styles.gradient}
-          >
-            <View style={styles.container}>
-              <View style={styles.logoTextContainer}>
-                <Text style={styles.logoText}>{title}</Text>
-                <Text style={styles.logoText}>{subTitle}</Text>
-              </View>
-
-              <ContinueBtn label={btnText} callback={continueBtn} />
+          <View style={styles.container}>
+            <View style={styles.logoTextContainer}>
+              <Text style={styles.logoText}>{title}</Text>
+              <Text style={styles.logoText}>{subTitle}</Text>
             </View>
-          </LinearGradient>
-        </ImageBackground>
-      </View>
-    );
-  }
+
+            <ContinueBtn label={btnText} callback={continueBtn} />
+          </View>
+        </LinearGradient>
+      </ImageBackground>
+    </View>
+  );
 };
 
 export default WelcomeScreen;
