@@ -1,6 +1,7 @@
 export type StackScreens = {
     WelcomeScreen: undefined;
-    HomeScreen: undefined;
+    TabsNavigator: undefined;
+    LoadingScreen: undefined;
 }
 
 export type TabsScreens = {
