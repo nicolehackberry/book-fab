@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   StyleSheet,
@@ -12,6 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
 import { viewedOnboarding } from "../redux/actions/localDataActions";
+import { getDataFromFS } from "../services/firebaseServices";
 
 const WelcomeScreen = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,11 @@ const WelcomeScreen = () => {
   const btnText = "Contiunue";
   const title = "Book";
   const subTitle = "Fab";
+
+  useEffect(() => {
+    getDataFromFS();
+  }, []);
+
 
   const continueBtn = async () => {
     try {
