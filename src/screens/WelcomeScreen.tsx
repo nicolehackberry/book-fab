@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
+import { useDispatch } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -8,54 +9,42 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
-import AppLoading from "expo-app-loading";
 import {
   useFonts,
   PinyonScript_400Regular,
 } from "@expo-google-fonts/pinyon-script";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
+import { viewedOnboarding } from "../redux/actions/localDataActions";
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { width, height } = Dimensions.get("window");
-  const [firstTimeUserlogin, setFirstTimeUserLogin] = useState(true);
+
   const btnText = "Contiunue";
   const title = "Book";
   const subTitle = "Fab";
+
   let [fontsLoaded] = useFonts({
     PinyonScript_400Regular,
   });
 
-  const setFirstTimeUser = async (value: boolean) => {
-    console.log("Saving value: ", value);
-
+  const continueBtn = async () => {
     try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("@first_time_loggedin", jsonValue);
-    } catch (e) {
-      console.log("Error in saving to Async Storage: ", e);
-    }
-  };
-
-  const continueBtn = () => {
-    navigation.push("TabsNavigator");
-  };
-
-  useEffect(() => {
-    if(!firstTimeUserlogin) {
-      console.log('TATATAG: ', firstTimeUserlogin);
-      
-      navigation.push("TabsNavigator");
+      await AsyncStorage.setItem('@viewedOnboarding', 'true');
+      dispatch(viewedOnboarding(true));
+    } catch (error) {
+      console.log('Error @setItem: ', error);
     };
-  },[firstTimeUserlogin]);
+  };
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <Text>...Loading</Text>;
   } else {
     return (
       <View style={containerStyle(height, width).container}>
@@ -74,8 +63,7 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
                 <Text style={styles.logoText}>{subTitle}</Text>
               </View>
 
-              <ContinueBtn label={btnText} callback={() => { setFirstTimeUser(false).then((response) => {console.log('Response: ', response);
-              }) }} />
+              <ContinueBtn label={btnText} callback={continueBtn} />
             </View>
           </LinearGradient>
         </ImageBackground>

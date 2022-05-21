@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     opacity: 1.0,
-    fontFamily: "Pinyon Script",
+    fontFamily: "PinyonScript_400Regular",
   },
   continueBtn: {
     alignItems: "center",
