@@ -1,7 +1,7 @@
-export const IS_FIRST_TIME_USER = 'IS_FIRST_TIME_USER';
+export const VIEW_ON_BOARDING = 'IS_FIRST_TIME_USER';
 
 
-export const firstTimeUser = (isFirstTimeUser: boolean) => ({
-  type: IS_FIRST_TIME_USER,
-  payload: isFirstTimeUser
+export const viewedOnboarding = (viewOnBoarding: boolean) => ({
+  type: VIEW_ON_BOARDING,
+  payload: viewOnBoarding
 });

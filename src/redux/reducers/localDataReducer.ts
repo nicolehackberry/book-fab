@@ -1,16 +1,16 @@
-import { IS_FIRST_TIME_USER } from "../actions/localDataActions";
+import { VIEW_ON_BOARDING } from "../actions/localDataActions";
 
 const initialState = {
-    isFirstTimeUser: null,
+    viewOnBoarding: null,
   };
 
 export const localDataReducer = (state = initialState, action: any) => {
   switch (action.type) {
       
-    case IS_FIRST_TIME_USER:
+    case VIEW_ON_BOARDING:
         return {
             ...state,
-            isFirstTimeUser: action.payload
+            viewOnBoarding: action.payload
         }
 
     default:

@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
+import { useDispatch } from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -15,12 +16,14 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ContinueBtn } from "../components/ContinueBtn";
+import { viewedOnboarding } from "../redux/actions/localDataActions";
 
 interface IWelcomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
 const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
+  const dispatch = useDispatch();
   const { width, height } = Dimensions.get("window");
 
   const btnText = "Contiunue";
@@ -34,6 +37,7 @@ const WelcomeScreen: FC<IWelcomeScreen> = ({ navigation }) => {
   const continueBtn = async () => {
     try {
       await AsyncStorage.setItem('@viewedOnboarding', 'true');
+      dispatch(viewedOnboarding(true));
     } catch (error) {
       console.log('Error @setItem: ', error);
     };

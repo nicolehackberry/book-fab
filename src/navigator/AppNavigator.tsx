@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/FontAwesome";
 import TabIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector, useDispatch } from "react-redux";
 
 import { StackScreens, TabsScreens } from "../helpers/types";
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -17,6 +18,8 @@ import FavoritesScreen from "../screens/FavoritesScreen";
 import SearchScreen from "../screens/SearchScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import { primaryColor } from "../utils/Colors";
+import { RootState } from "../redux/store";
+import { viewedOnboarding } from "../redux/actions/localDataActions";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 const Tabs = createBottomTabNavigator<TabsScreens>();
@@ -109,30 +112,22 @@ function TabsNavigator() {
 
 export function AppNavigator() {
   const navigationRef = useNavigationContainerRef();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [viewOnboarding, setViewOnboarding] = useState(false);
-
-  AsyncStorage.getItem("@viewedOnboarding").then((value) => {
-    console.log('VALUEE: ', value);
-    
-});
+  const TEST = useSelector((state: RootState) => state.localData.viewOnBoarding);
 
   const checkOnboarding = async () => {
     try {
       const value = await AsyncStorage.getItem('@viewedOnboarding');
-      console.log('Value: ', value);
+      dispatch(viewedOnboarding(value != null ? JSON.parse(value) : false));
       
-
       if(value !== null) {
         setViewOnboarding(true);
-        console.log('Value !== null');
-        
       };
     } catch (error) {
       console.log('Error @checkOnboarding: ', error);
     } finally {
-      console.log('Kmr vi hit?');
-      
       setLoading(false);
     };
   };
@@ -146,12 +141,17 @@ export function AppNavigator() {
     
   }, [viewOnboarding]);
 
+  useEffect(() => {
+    console.log('Lyssnar på redux value: ', TEST);
+    
+  }, [TEST])
+
   return (
     <NavigationContainer ref={navigationRef}>
 
           {loading ? (
             <Loading />
-          ) : viewOnboarding ? (
+          ) : TEST ? (
             <Navigation />
           ) : (
             <Welcome />

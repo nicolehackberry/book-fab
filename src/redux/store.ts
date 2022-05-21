@@ -7,3 +7,5 @@ export const store = configureStore({
     localData: localDataReducer,
   }
 });
+
+export type RootState = ReturnType<typeof store.getState>;

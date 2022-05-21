@@ -1,8 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, View, Text, StyleSheet } from "react-native";
+import { Provider } from 'react-redux'
 
 import { AppNavigator } from "./src/navigator/AppNavigator";
+import { store } from "./src/redux/store";
 import WelcomeScreen from "./src/screens/WelcomeScreen";
 
 // const Loading = () => {
@@ -44,8 +46,9 @@ export default function App() {
       ) : (
         <WelcomeScreen />
       )} */}
-
+      <Provider store={store}>
       <AppNavigator />
+      </Provider>
     </>
   );
 };
