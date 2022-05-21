@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet, View, ActivityIndicator } from "react-native";
 import {
   NavigationContainer,
   useNavigationContainerRef,
@@ -35,6 +35,32 @@ const navOptions = {
   headerMode: "float",
   headerTitle: () => <Text>Book Fab</Text>,
 };
+
+const LoadingScreen = () => {
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="gray" />
+    </View>
+  );
+};
+
+const Navigation = () => (
+  <RootStack.Navigator screenOptions={navOptions}>
+    <RootStack.Screen name="TabsNavigator" component={TabsNavigator} />
+  </RootStack.Navigator>
+);
+
+const Welcome = () => (
+  <RootStack.Navigator screenOptions={navOptions}>
+    <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ headerShown: false }}/>
+  </RootStack.Navigator>
+);
+
+const Loading = () => (
+  <RootStack.Navigator screenOptions={navOptions}>
+    <RootStack.Screen name="LoadingScreen" component={LoadingScreen} />
+  </RootStack.Navigator>
+);
 
 function TabsNavigator() {
   return (
@@ -83,43 +109,63 @@ function TabsNavigator() {
 
 export function AppNavigator() {
   const navigationRef = useNavigationContainerRef();
-  const [isFirstLogin, setIsFirstLogin] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [viewOnboarding, setViewOnboarding] = useState(false);
 
-  const getData = async () => {
+  AsyncStorage.getItem("@viewedOnboarding").then((value) => {
+    console.log('VALUEE: ', value);
+    
+});
+
+  const checkOnboarding = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem("@first_time_loggedin");
-      console.log("Data fetched: ", jsonValue);
+      const value = await AsyncStorage.getItem('@viewedOnboarding');
+      console.log('Value: ', value);
+      
 
-      //setIsFirstLogin(jsonValue != null ? JSON.parse(jsonValue) : null);
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      console.log("Error in reading value from Async Storage: ", e);
-    }
+      if(value !== null) {
+        setViewOnboarding(true);
+        console.log('Value !== null');
+        
+      };
+    } catch (error) {
+      console.log('Error @checkOnboarding: ', error);
+    } finally {
+      console.log('Kmr vi hit?');
+      
+      setLoading(false);
+    };
   };
 
   useEffect(() => {
-    getData();
+    checkOnboarding();
   }, []);
+
+  useEffect(() => {
+    console.log('Lyssnar på VIEWONBOARDING: ', viewOnboarding);
+    
+  }, [viewOnboarding]);
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <RootStack.Navigator screenOptions={navOptions}>
-        <>
-          {isFirstLogin ? (
-            <RootStack.Screen
-              name={"WelcomeScreen"}
-              component={WelcomeScreen}
-              options={{ headerShown: false }}
-            />
+
+          {loading ? (
+            <Loading />
+          ) : viewOnboarding ? (
+            <Navigation />
           ) : (
-            <RootStack.Screen
-              name={"TabsNavigator"}
-              component={TabsNavigator}
-              options={{ title: "tralöalalala" }}
-            />
+            <Welcome />
           )}
-        </>
-      </RootStack.Navigator>
+
     </NavigationContainer>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  }
+});
+
+
