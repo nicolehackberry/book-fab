@@ -4,6 +4,8 @@ import {
   collection,
   getDocs,
   Firestore,
+  doc,
+  getDoc
 } from "firebase/firestore/lite";
 import { query, where } from "firebase/firestore";
 
@@ -30,29 +32,14 @@ export const fbInit = () => {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
 };
-
-export const getAllData = async () => {
+export const fetchDataFromFS = async () => {
   const query = collection(db, "creatorData");
   const dataSnapshot = await getDocs(query);
   const dataList = dataSnapshot.docs.map((doc) => doc.data());
-  console.log("All data: ", dataList);
-};
 
-export const fetchLocations = async () => {
-  await getDocs(collection(db, "creatorData")).then((snapshot) => {
-    const locationData = [{}];
-    snapshot.docs.forEach((doc) => {
-      if (doc.exists()) {
-        let data = doc.data();
-        locationData.push({ ...data.userLocation });
-        console.log("Loggar???: ", locationData);
-
-        return locationData;
-      } else {
-        console.log("No such data: QUESTIONS2022!");
-
-        return locationData;
-      }
-    });
-  });
+  if (dataList) {
+    return dataList;
+  } else {
+    return null;
+  };
 };

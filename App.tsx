@@ -13,7 +13,7 @@ import { LoadingScreen } from "./src/components/LoadingScreen";
 export default function App() {
   let [fontsLoaded] = useFonts({
     PinyonScript_400Regular,
-  });
+  }); 
 
   useEffect(() => {
     fbInit();
