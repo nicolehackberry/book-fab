@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Button, Dimensions } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
+import MapView from 'react-native-maps';
 
-import IntroSlider from "../components/IntroSlider";
-import { viewedOnboarding, getTESTFromFS1 } from "../redux/actions/localDataActions";
+import { viewedOnboarding, getCreatorsDataFS } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
 
 interface IHomeScreen {
@@ -17,7 +17,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const creatorsLocations = useSelector((state: RootState) => state.localData.creatorLocations);
 
   useEffect(() => {
-    dispatch(getTESTFromFS1() as any);
+    dispatch(getCreatorsDataFS() as any);
   },[])
 
   useEffect(() => {
@@ -37,8 +37,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <IntroSlider />
-      <Text>Home Screen</Text>
+      <MapView style={styles.map} />
       <Button
         title="Press Me!"
         onPress={() => {
@@ -53,6 +52,12 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    padding: 15,
+    justifyContent: "center",
+    height: 500,
+    backgroundColor: "purple",
+  },
+  map: {
     padding: 15,
     justifyContent: "center",
     height: 500,

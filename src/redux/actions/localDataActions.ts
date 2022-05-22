@@ -9,7 +9,7 @@ export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   payload: viewOnBoarding
 });
 
-export const getTESTFromFS1 = () => {
+export const getCreatorsDataFS = () => {
   return async (dispatch: any) => {
       const fsData = await fetchDataFromFS();
 
