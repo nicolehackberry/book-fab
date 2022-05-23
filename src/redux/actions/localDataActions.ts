@@ -9,9 +9,9 @@ export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   payload: viewOnBoarding
 });
 
-export const getCreatorsDataFS = () => {
+export const getCreatorsDataFS = (userId: string) => {
   return async (dispatch: any) => {
-      const fsData = await fetchDataFromFS();
+      const fsData = await fetchDataFromFS(userId);
 
           dispatch ({
               type: LOCATIONS_FROM_FS,

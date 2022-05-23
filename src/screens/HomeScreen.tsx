@@ -4,9 +4,11 @@ import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 import MapView, { Marker } from 'react-native-maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { viewedOnboarding, getCreatorsDataFS } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
+import { primaryColor } from "../utils/Colors";
 
 interface IHomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
@@ -17,7 +19,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const creatorsLocations = useSelector((state: RootState) => state.localData.creatorLocations);
 
   useEffect(() => {
-    dispatch(getCreatorsDataFS() as any);
+    dispatch(getCreatorsDataFS('1xBiFbRDBy4hKfgwvQoN') as any);
   },[])
 
   useEffect(() => {
@@ -47,15 +49,16 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <MapView style={styles.map}>
+
         <Marker
           coordinate={{ latitude: 59.4391, longitude: 17.9415 }}
           pinColor="#8fd9a8"
           title={"omnomnomnom"}
         >
-          <View>
-            <Text style={styles.marker}>TESTDJSHD</Text>
-          </View>
+          <Icon name={'map-pin'} size={24} color={primaryColor} />
+          
         </Marker>
+
       </MapView>
       <Button
         title="Press Me!"
@@ -74,7 +77,6 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     height: 500,
-    backgroundColor: "purple",
   },
   map: {
     padding: 15,
@@ -83,8 +85,9 @@ const styles = StyleSheet.create({
     backgroundColor: "purple",
   },
   marker: {
-    height: 50,
-    width: 50,
+    height: 24,
+    width: 24,
+    borderRadius: 100,
     backgroundColor: 'purple'
   }
 });
