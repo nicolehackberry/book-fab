@@ -45,7 +45,7 @@
 // };
 
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { collection, getDocs, setDoc, doc, getFirestore } from 'firebase/firestore/lite';
+import { collection, getDocs, setDoc, doc, getFirestore, where } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -63,12 +63,12 @@ export const fbInit = () => {
   app = initializeApp(firebaseConfig);
 };
 
-export const fetchDataFromFS = async (userId: string) => {
+export const fetchDataFromFS = async () => {
   const db = getFirestore();
-  const query = collection(db, "creatorData", '17ep4DmrBPS7OsfcTjLd');
+  const query = collection(db, "creatorData");
   const dataSnapshot = await getDocs(query);
   const dataList = dataSnapshot.docs.map((doc) => doc.data());
-  console.log('Data from fs: ', dataList);
+  //console.log('Data from fs: ', dataList);
   
   
 

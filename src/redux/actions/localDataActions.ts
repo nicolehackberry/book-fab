@@ -9,9 +9,11 @@ export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   payload: viewOnBoarding
 });
 
-export const getCreatorsDataFS = (userId: string) => {
+export const getCreatorsDataFS = () => {
   return async (dispatch: any) => {
-      const fsData = await fetchDataFromFS(userId);
+      const fsData = await fetchDataFromFS();
+      //console.log('TAG data in redux: ', fsData);
+      
 
           dispatch ({
               type: LOCATIONS_FROM_FS,
