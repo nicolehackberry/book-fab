@@ -68,9 +68,6 @@ export const fetchDataFromFS = async () => {
   const query = collection(db, "creatorData");
   const dataSnapshot = await getDocs(query);
   const dataList = dataSnapshot.docs.map((doc) => doc.data());
-  //console.log('Data from fs: ', dataList);
-  
-  
 
   if (dataList) {
     return dataList;

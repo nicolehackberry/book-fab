@@ -12,8 +12,6 @@ export const viewedOnboarding = (viewOnBoarding: boolean) => ({
 export const getCreatorsDataFS = () => {
   return async (dispatch: any) => {
       const fsData = await fetchDataFromFS();
-      //console.log('TAG data in redux: ', fsData);
-      
 
           dispatch ({
               type: LOCATIONS_FROM_FS,
