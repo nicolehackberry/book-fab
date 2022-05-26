@@ -10,7 +10,7 @@ import * as Location from "expo-location";
 import {
   viewedOnboarding,
   getCreatorsDataFS,
-  useCurrentUserLocation
+  useCurrentUserLocation,
 } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
 import MapMarker from "../components/MapMarker";
@@ -33,20 +33,18 @@ export interface ILocation extends React.HTMLProps<HTMLCollection> {
 }
 
 export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
-  const dispatch = useDispatch();
   const [locationInternal, setLocationInternal] = useState<LocationObject>();
   const [errorMsg, setErrorMsg] = useState<string>();
 
   const setUserLocationPermission = async (useLocation: string) => {
-      try {
-        await AsyncStorage.setItem("@useUserLocation", useLocation);
-        //dispatch(useCurrentUserLocation(useLocation));
-      } catch (error) {
-        console.log("Error @setItem: ", error);
-      }
-    };
+    try {
+      await AsyncStorage.setItem("@useUserLocation", useLocation);
+    } catch (error) {
+      console.log("Error @setItem: ", error);
+    }
+  };
 
-    const fetchUserLocation = async () => {
+  const fetchUserLocation = async () => {
     if (Platform.OS === "android" && !Device.isDevice) {
       setErrorMsg(
         "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
@@ -56,19 +54,18 @@ export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
-      setUserLocationPermission('false');
+      setUserLocationPermission("false");
       return;
     }
 
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
     setLocationInternal(location);
-    setUserLocationPermission('true');
+    setUserLocationPermission("true");
   };
 
-
   useEffect(() => {
-    fetchUserLocation()
+    fetchUserLocation();
   }, []);
 
   let text = "Waiting..";
@@ -106,20 +103,31 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const creatorsLocations = useSelector(
     (state: RootState) => state.localData.creatorLocations
   );
-  const useUserLocation = useSelector((state: RootState) => state.localData.useUserLocation);
+  //const useUserLocation = useSelector((state: RootState) => state.localData.useUserLocation);
   const [location, setLocation] = useState<LocationObject>();
-  const [userLocation, setUserLocation] = useState<IInitialRegion>(initialRegion);
-  const [showUserLocation, setShowUserLocation] = useState(false);
+  const [regionOnChange, setRegionOnChange] =
+    useState<IInitialRegion>(initialRegion);
+
+  const [pin, setPin] = useState({
+    latitude: 59.62210052300712,
+    longitude: 18.791429741098028,
+    altitude: 17.961627960205078,
+    timestamp: 675250850470.678,
+    accuracy: 4033.360920173482,
+    speed: -1,
+    heading: -1,
+    isFromMockProvider: false,
+  });
 
   const isUserLocationPermissionGranted = async () => {
     try {
-      const value = await AsyncStorage.getItem('@useUserLocation');
+      const value = await AsyncStorage.getItem("@useUserLocation");
       if (value !== null) {
         dispatch(useCurrentUserLocation(value));
       }
     } catch (error) {
-      console.log('Error in retrieving data (HomeScreen.tsx: ', error);
-    };
+      console.log("Error in retrieving data (HomeScreen.tsx: ", error);
+    }
   };
 
   const clearOnboarding = async () => {
@@ -132,7 +140,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   };
 
   const onRegionChange = (region: IInitialRegion) => {
-    setUserLocation(region);
+    setRegionOnChange(region);
   };
 
   useEffect(() => {
@@ -141,27 +149,17 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (location) {
-      setUserLocation((prevState) => ({
-        ...prevState,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      }));
+    if (regionOnChange) {
+      console.log("TAG regionOnChange: ", regionOnChange);
     }
-  }, [location]);
-
-  useEffect(() => {
-    if (useUserLocation) {
-      //console.log("TAG useUserLocation: ", useUserLocation);
-    }
-  }, [useUserLocation]);
+  }, [regionOnChange]);
 
   return (
     creatorsLocations && (
       <View style={styles.container}>
         {location ? (
           <>
-          {/* {console.log('TAG location: ', location)} */}
+            {/* {console.log('TAG location: ', location)} */}
             <MapView
               style={styles.map}
               initialRegion={{
@@ -171,9 +169,13 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                 longitudeDelta: 0.0221,
               }}
               onRegionChange={onRegionChange}
-              showsUserLocation={useUserLocation === 'true' ? true : false}
+              showsUserLocation={true}
               onUserLocationChange={(e) => {
-                console.log('TAG on user location change: ', e.nativeEvent.coordinate)
+                console.log(
+                  "TAG on user location change: ",
+                  e.nativeEvent.coordinate
+                );
+                setPin(e.nativeEvent.coordinate);
               }}
             >
               {creatorsLocations.map(
