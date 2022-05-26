@@ -15,6 +15,9 @@ const MapMarker: FC<IMapMarker> = ({ data }) => {
         <Marker
           coordinate={{ latitude: data.userLocation.latitude, longitude: data.userLocation.longitude }}
           pinColor="#8fd9a8"
+          onPress={() => {
+            console.log('TAG pressed pin with this info: ', data);
+          }}
         >
 
           <Icon name={'map-pin'} size={24} color={primaryColor} />

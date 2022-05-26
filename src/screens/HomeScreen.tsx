@@ -20,7 +20,7 @@ interface IHomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
-interface ICreatorLocations {
+export interface ICreatorLocations {
   userLocation: {
     latitude: number;
     longitude: number;
