@@ -33,10 +33,20 @@ export interface ILocation extends React.HTMLProps<HTMLCollection> {
 }
 
 export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
+  const dispatch = useDispatch();
   const [locationInternal, setLocationInternal] = useState<LocationObject>();
   const [errorMsg, setErrorMsg] = useState<string>();
 
-  const fetchUserLocation = async () => {
+  const setUserLocationPermission = async (useLocation: string) => {
+      try {
+        await AsyncStorage.setItem("@useUserLocation", useLocation);
+        //dispatch(useCurrentUserLocation(useLocation));
+      } catch (error) {
+        console.log("Error @setItem: ", error);
+      }
+    };
+
+    const fetchUserLocation = async () => {
     if (Platform.OS === "android" && !Device.isDevice) {
       setErrorMsg(
         "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
@@ -46,13 +56,16 @@ export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
+      setUserLocationPermission('false');
       return;
     }
 
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
     setLocationInternal(location);
+    setUserLocationPermission('true');
   };
+
 
   useEffect(() => {
     fetchUserLocation()
@@ -97,41 +110,16 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const [location, setLocation] = useState<LocationObject>();
   const [userLocation, setUserLocation] = useState<IInitialRegion>(initialRegion);
   const [showUserLocation, setShowUserLocation] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string>();
-    const [pin, setPin] = useState({
-      latitude: 37.78825,
-      longitude: 17.94858192472818,
-    });
 
-    const getUserLocationPermission = async (useLocation: string) => {
-      try {
-        await AsyncStorage.setItem("@useUserLocation", useLocation);
-        dispatch(useCurrentUserLocation(useLocation));
-      } catch (error) {
-        console.log("Error @setItem: ", error);
+  const isUserLocationPermissionGranted = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@useUserLocation');
+      if (value !== null) {
+        dispatch(useCurrentUserLocation(value));
       }
+    } catch (error) {
+      console.log('Error in retrieving data (HomeScreen.tsx: ', error);
     };
-
-  const fetchUserLocation = async () => {
-    if (Platform.OS === "android" && !Device.isDevice) {
-      setErrorMsg(
-        "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
-      );
-      return;
-    }
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-      getUserLocationPermission('false');
-      return;
-    }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setPin({
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude
-    });
-    getUserLocationPermission('true');
   };
 
   const clearOnboarding = async () => {
@@ -149,7 +137,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getCreatorsDataFS() as any);
-    fetchUserLocation();
+    isUserLocationPermissionGranted();
   }, []);
 
   useEffect(() => {
@@ -173,13 +161,12 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
       <View style={styles.container}>
         {location ? (
           <>
-          {console.log('TAG location: ', location)}
-          {console.log('TAG pin: ', pin)}
+          {/* {console.log('TAG location: ', location)} */}
             <MapView
               style={styles.map}
               initialRegion={{
-                latitude: pin.latitude,
-                longitude: pin.longitude,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
                 latitudeDelta: 0.0522,
                 longitudeDelta: 0.0221,
               }}
