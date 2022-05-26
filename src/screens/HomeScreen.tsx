@@ -10,6 +10,7 @@ import * as Location from "expo-location";
 import {
   viewedOnboarding,
   getCreatorsDataFS,
+  useCurrentUserLocation
 } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
 import MapMarker from "../components/MapMarker";
@@ -63,8 +64,8 @@ export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={{ backgroundColor: "pink" }}>{text}</Text>
+    <View>
+      <Text style={{ padding: 36, backgroundColor: "pink" }}>{text}</Text>
     </View>
   );
 };
@@ -83,18 +84,53 @@ interface IInitialRegion {
   longitudeDelta: number;
 }
 
+//
+
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const dispatch = useDispatch();
   const creatorsLocations = useSelector(
     (state: RootState) => state.localData.creatorLocations
   );
+  const useUserLocation = useSelector((state: RootState) => state.localData.useUserLocation);
   const [location, setLocation] = useState<LocationObject>();
-  const [userLocation, setUserLocation] =
-    useState<IInitialRegion>(initialRegion);
+  const [userLocation, setUserLocation] = useState<IInitialRegion>(initialRegion);
+  const [showUserLocation, setShowUserLocation] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>();
+    const [pin, setPin] = useState({
+      latitude: 37.78825,
+      longitude: 17.94858192472818,
+    });
 
-  useEffect(() => {
-    dispatch(getCreatorsDataFS() as any);
-  }, []);
+    const getUserLocationPermission = async (useLocation: string) => {
+      try {
+        await AsyncStorage.setItem("@useUserLocation", useLocation);
+        dispatch(useCurrentUserLocation(useLocation));
+      } catch (error) {
+        console.log("Error @setItem: ", error);
+      }
+    };
+
+  const fetchUserLocation = async () => {
+    if (Platform.OS === "android" && !Device.isDevice) {
+      setErrorMsg(
+        "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
+      );
+      return;
+    }
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      getUserLocationPermission('false');
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setPin({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude
+    });
+    getUserLocationPermission('true');
+  };
 
   const clearOnboarding = async () => {
     try {
@@ -110,6 +146,11 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   };
 
   useEffect(() => {
+    dispatch(getCreatorsDataFS() as any);
+    fetchUserLocation();
+  }, []);
+
+  useEffect(() => {
     if (location) {
       setUserLocation((prevState) => ({
         ...prevState,
@@ -120,25 +161,31 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   }, [location]);
 
   useEffect(() => {
-    if (userLocation) {
-      console.log("TAG USER location: ", userLocation);
+    if (useUserLocation) {
+      //console.log("TAG useUserLocation: ", useUserLocation);
     }
-  }, [userLocation]);
+  }, [useUserLocation]);
 
   return (
     creatorsLocations && (
       <View style={styles.container}>
         {location ? (
           <>
+          {console.log('TAG location: ', location)}
+          {console.log('TAG pin: ', pin)}
             <MapView
               style={styles.map}
               initialRegion={{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: pin.latitude,
+                longitude: pin.longitude,
                 latitudeDelta: 0.0522,
                 longitudeDelta: 0.0221,
               }}
               onRegionChange={onRegionChange}
+              showsUserLocation={useUserLocation === 'true' ? true : false}
+              onUserLocationChange={(e) => {
+                console.log('TAG on user location change: ', e.nativeEvent.coordinate)
+              }}
             >
               {creatorsLocations.map(
                 (item: ICreatorLocations, index: number) => (
@@ -173,7 +220,7 @@ const styles = StyleSheet.create({
   map: {
     padding: 15,
     justifyContent: "center",
-    height: 500,
+    height: 700,
     backgroundColor: "purple",
   },
 });
