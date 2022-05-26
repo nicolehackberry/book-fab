@@ -36,24 +36,26 @@ export const FetchLocation: FC<ILocation> = ({ setLocation }) => {
   const [locationInternal, setLocationInternal] = useState<LocationObject>();
   const [errorMsg, setErrorMsg] = useState<string>();
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS === "android" && !Device.isDevice) {
-        setErrorMsg(
-          "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
-        );
-        return;
-      }
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
+  const fetchUserLocation = async () => {
+    if (Platform.OS === "android" && !Device.isDevice) {
+      setErrorMsg(
+        "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
+      );
+      return;
+    }
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setLocationInternal(location);
-    })();
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    setLocationInternal(location);
+  };
+
+  useEffect(() => {
+    fetchUserLocation()
   }, []);
 
   let text = "Waiting..";
