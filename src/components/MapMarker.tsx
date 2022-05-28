@@ -1,15 +1,17 @@
 import React, { FC } from 'react';
 import { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
-import { ICreatorLocations } from '../screens/HomeScreen';
+import { ICreatorsData } from '../screens/HomeScreen';
 import { primaryColor } from "../utils/Colors";
 
 interface IMapMarker {
-    data: ICreatorLocations;
+    data: ICreatorsData;
+    navigation: NativeStackNavigationProp<any, any>;
 }
 
-const MapMarker: FC<IMapMarker> = ({ data }) => {
+const MapMarker: FC<IMapMarker> = ({ data, navigation}) => {
     
     return (
         <Marker
@@ -17,6 +19,7 @@ const MapMarker: FC<IMapMarker> = ({ data }) => {
           pinColor="#8fd9a8"
           onPress={() => {
             console.log('TAG pressed pin with this info: ', data);
+            navigation.navigate('CreatorsScreen')
           }}
         >
 

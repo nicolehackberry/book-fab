@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Button} from "react-native";
+import { StyleSheet, View, Button, Text} from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,12 +20,23 @@ interface IHomeScreen {
   navigation: NativeStackNavigationProp<any, any>;
 }
 
-export interface ICreatorLocations {
-  userLocation: {
-    latitude: number;
-    longitude: number;
-  };
-}
+export interface ICreatorsData {
+    description: string;
+    email: string;
+    expertise: string;
+    id: string;
+    name: string;
+    socialMedia: {
+      facebook: string;
+      instagram: string;
+      tiktok: string;
+    };
+    test: boolean;
+    userLocation: {
+      latitude: number;
+      longitude: number;
+    };
+};
 
 interface IInitialRegion {
   latitude: number;
@@ -107,18 +118,20 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
               onRegionChange={onRegionChange}
               showsUserLocation={useUserLocation === 'true' ? true : false}
               onUserLocationChange={(e) => {
-                console.log(
-                  "TAG on user location change: ",
-                  e.nativeEvent.coordinate
-                );
+                // console.log(
+                //   "TAG on user location change: ",
+                //   e.nativeEvent.coordinate
+                // );
                 setPin(e.nativeEvent.coordinate);
               }}
             >
               {creatorsLocations.map(
-                (item: ICreatorLocations, index: number) => (
-                  <MapMarker key={index} data={item} />
+                (item: ICreatorsData, index: number) => (
+                  <MapMarker key={index} data={item} navigation={navigation} />
                 )
               )}
+
+              {/* <View style={{ height: 300, width: 300, backgroundColor: 'purple' }}><Text>Testar denna div</Text></View> */}
             </MapView>
           </>
         ) : (
