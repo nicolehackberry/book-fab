@@ -9,7 +9,7 @@ import { primaryColor } from "../utils/Colors";
 interface IMapMarker {
   data: ICreatorsData;
   navigation: NativeStackNavigationProp<any, any>;
-}
+};
 
 const MapMarker: FC<IMapMarker> = ({ data, navigation }) => {
   console.log('TAG DATATATTA: ', data);
