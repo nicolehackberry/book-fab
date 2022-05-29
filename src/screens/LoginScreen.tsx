@@ -2,10 +2,7 @@ import React, { FC, useEffect, useState, useContext } from 'react';
 import {StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from "react-native-screens/native-stack";
 import {Button, Card, TextInput} from 'react-native-paper';
-import { useDispatch } from 'react-redux';
 
-import { loginToFB } from '../redux/actions/localDataActions';
-import { logInToFirebase } from '../services/firebaseServices';
 import { AuthContext } from '../contexts/AuthContext';
 
 interface LoginScreenInterface {

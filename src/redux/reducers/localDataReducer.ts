@@ -2,9 +2,6 @@ import {
   VIEW_ON_BOARDING,
   LOCATIONS_FROM_FS,
   UAE_USER_LOCATION,
-  REGISTER_USER_FS,
-  LOGIN_USER,
-  FETCH_LOGEDIN_USER
 } from "../actions/localDataActions";
 
 const initialState = {
@@ -33,21 +30,6 @@ export const localDataReducer = (state = initialState, action: any) => {
         ...state,
         useUserLocation: action.payload,
       };
-    case REGISTER_USER_FS:
-      return {
-        ...state,
-        registerUser: action.payload,
-      };
-    case LOGIN_USER:
-      return {
-        ...state,
-        loggingInUser: action.payload,
-      };
-    case FETCH_LOGEDIN_USER:
-      return {
-        ...state,
-        currentUser: action.payload
-      }
     default:
       return state;
   }

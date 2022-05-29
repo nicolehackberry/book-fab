@@ -1,11 +1,8 @@
 import React, { FC, useContext } from "react";
 import { StyleSheet, Text, Button, Dimensions, ScrollView } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
-import {  useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { getCurrentLogedInUser } from "../services/firebaseServices";
 import MissingAuthScreen from "./MissingAuthScreen";
 
 interface IProfileScreen {
