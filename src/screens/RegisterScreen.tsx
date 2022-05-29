@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, Button, TextInput } from "react-native";
-//import {Button, Card, TextInput} from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from "react-native";
+import {Button, Card, TextInput} from 'react-native-paper';
 
 import { useNavigationContainerRef } from "@react-navigation/native";
 
@@ -25,7 +25,7 @@ export const RegisterScreen: FC = (props: any) => {
   // const authContext = useContext(AuthContext);
   const [text, onChangeText] = React.useState("Useless Text");
   const [number, onChangeNumber] = React.useState(null);
-
+  const [focus, setFocus] = useState(false);
 
   const [registerState, setRegisterState] = useState(initialRegisterState);
 
@@ -49,59 +49,55 @@ export const RegisterScreen: FC = (props: any) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <View style={styles.registerForm}>
+        <Card style={styles.registerForm}>
           <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={text}
-          />
-          {/* <TextInput
-            style={styles.input}
-            onChangeText={onChangeNumber}
-            value={number}
-            placeholder="useless placeholder"
-            keyboardType="numeric"
-          /> */}
-
-          <TextInput
-            placeholder="Displayname"
+            mode="outlined"
+            label="Displayname"
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("displayName", text)}
           />
 
           <TextInput
-            placeholder="E-mail"
+            mode="outlined"
+            label="E-mail"
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("email", text)}
           />
 
           <TextInput
             secureTextEntry
-            placeholder={"text label"}
+            mode={"outlined"}
+            label={'Lösenord'}
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("password", text)}
           />
 
           <TextInput
             secureTextEntry
-            placeholder={"text label"}
+            mode={"outlined"}
+            label={'Lösenord'}
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("repeatPassword", text)}
           />
-        </View>
+        </Card>
       </ScrollView>
 
       <Button
         color={disabled ? "gray" : undefined}
         disabled={disabled}
-        title="title??"
+        style={[styles.input]}
         onPress={async () => {
-          // await authContext?.register(registerState.displayName, registerState.email, registerState.password);
-          // authContext?.login(registerState.displayName, registerState.password)
+          // await authContext?.register(
+          //   registerState.displayName,
+          //   registerState.email,
+          //   registerState.password
+          // );
+          // authContext?.login(registerState.displayName, registerState.password);
         }}
-      />
-      {/* {}
-      </Button> */}
+      >
+        Button
+        {/* {translate(tokens.screens.loginScreen.registerBtnText)} */}
+      </Button>
     </View>
   );
 };
@@ -118,11 +114,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: "100%",
   },
-  textInput: {},
   input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
+    margin: 10,
+  },
+  focus: {
+    backgroundColor: "green",
   },
 });
