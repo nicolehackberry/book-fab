@@ -6,11 +6,16 @@ import MissingAuthScreen from "./MissingAuthScreen";
 
 interface IProfileScreen {
   navigation: NativeStackNavigationProp<any, any>;
+};
+
+interface IProtectedItems {
+    children: React.ReactNode;
+    navigation: NativeStackNavigationProp<any, any>,
 }
 
-const ProtectedItems: React.FC = ({ children }) => {
+const ProtectedItems: React.FC<IProtectedItems> = ({ children, navigation }) => {
   const authStatus = getCurrentLogedInUser();
-  if (authStatus === null) return <MissingAuthScreen />;
+  if (authStatus === null) return <MissingAuthScreen navigation={navigation}/>;
   return <>{children || null}</>;
 };
 
@@ -20,7 +25,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   }, []);
 
   return (
-    <ProtectedItems>
+    <ProtectedItems navigation={navigation}>
       <ScrollView style={styles.container}>
         <Text>Profile Screen</Text>
         <Button

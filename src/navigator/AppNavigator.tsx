@@ -16,6 +16,7 @@ import { viewedOnboarding } from "../redux/actions/localDataActions";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { TabsNavigator } from "./TabsNavigator";
 import CreatorsScreen from "../screens/CreatorsScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 
@@ -38,6 +39,7 @@ const Navigation = () => (
   <RootStack.Navigator screenOptions={navOptions}>
     <RootStack.Screen name="TabsNavigator" component={TabsNavigator} />
     <RootStack.Screen name="CreatorsScreen" component={CreatorsScreen} />
+    <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
   </RootStack.Navigator>
 );
 
