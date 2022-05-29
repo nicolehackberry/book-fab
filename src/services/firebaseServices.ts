@@ -136,3 +136,7 @@ export const logInToFirebase = async (email: string, password: string): Promise<
       return undefined;
   };
 };
+
+export const signOutUser = () => {
+
+};

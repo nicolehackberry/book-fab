@@ -1,10 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import {StyleSheet, View} from 'react-native';
 import {NativeStackNavigationProp} from "react-native-screens/native-stack";
 import {Button, Card, TextInput} from 'react-native-paper';
 import { useDispatch } from 'react-redux';
+
 import { loginToFB } from '../redux/actions/localDataActions';
 import { logInToFirebase } from '../services/firebaseServices';
+import { AuthContext } from '../contexts/AuthContext';
 
 interface LoginScreenInterface {
     navigation: NativeStackNavigationProp<any, any>,
@@ -21,7 +23,7 @@ const initialUserState: FirebaseUser = {
 };
 
 export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
-    const dispatch = useDispatch();
+    const authContext = useContext(AuthContext);
     const [disabled, setDisabled] = useState(false);
     const [userState, setUserState] = useState<FirebaseUser>(initialUserState);
 
@@ -76,10 +78,7 @@ export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
                     mode={'contained'}
                     icon={'login'}
                     onPress={async () => {
-                        const test = await logInToFirebase(userState.userName, userState.password);
-
-                        dispatch(loginToFB(test ? true : false));
-
+                        authContext?.login(userState.userName, userState.password)
                     }}>Test 3</Button>
             </View>
         </View>

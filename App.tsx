@@ -12,6 +12,7 @@ import { store } from "./src/redux/store";
 import { LoadingScreen } from "./src/components/LoadingScreen";
 import { fbInit } from "./src/services/firebaseServices";
 import { theme } from "./src/utils/themes";
+import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -27,10 +28,12 @@ export default function App() {
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <Provider store={store}>
-        <AppNavigator />
-      </Provider>
-    </PaperProvider>
+    <AuthContextProvider>
+      <PaperProvider theme={theme}>
+        <Provider store={store}>
+          <AppNavigator />
+        </Provider>
+      </PaperProvider>
+    </AuthContextProvider>
   );
 }

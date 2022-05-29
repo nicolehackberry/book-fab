@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
 
-import { logInToFirebase, registerUserInFirebase } from "../services/firebaseServices";
+import { AuthContext } from "../contexts/AuthContext";
 
 type IRegisterScreen = {
   displayName: string;
@@ -19,8 +19,8 @@ const initialRegisterState: IRegisterScreen = {
 };
 
 export const RegisterScreen: FC = (props: any) => {
+  const authContext = useContext(AuthContext);
   const [disabled, setDisabled] = useState(false);
-
   const [registerState, setRegisterState] = useState(initialRegisterState);
 
   const onFieldChange = (field: string, value: any) => {
@@ -81,12 +81,12 @@ export const RegisterScreen: FC = (props: any) => {
         disabled={disabled}
         style={[styles.input]}
         onPress={async () => {
-          await registerUserInFirebase(
+          await authContext?.register(
             registerState.displayName,
             registerState.email,
             registerState.password
           );
-          logInToFirebase(registerState.email, registerState.password);
+          authContext?.login(registerState.displayName, registerState.password);
         }}
       >
         Button
