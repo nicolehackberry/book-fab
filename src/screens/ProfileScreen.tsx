@@ -1,17 +1,25 @@
-import React, { FC } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import React, { FC, useEffect } from 'react';
+import { StyleSheet, Text, Button, Dimensions, ScrollView } from 'react-native';
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+import { getCurrentLogedInUser } from '../services/firebaseServices';
 
 interface IProfileScreen {
     navigation: NativeStackNavigationProp<any, any>,
-}
+};
+
+const ProtectedItems: React.FC = ({ children }) => {
+    //const { authStatus } = useAuth();
+    //if (authStatus !== AuthStatus.AUTHORIZED) return null;
+    return <>{children || null}</>;
+};
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
+
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Text>Profile Screen</Text>
             <Button  title='Press Me!' onPress={() => { navigation.navigate('HomeScreen') }}/>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -20,8 +28,8 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
     container: {
         padding: 15,
-        justifyContent: 'center',
-        height: 500,
         backgroundColor: 'green',
+        width: Dimensions.get("window").width,
+        height: Dimensions.get("window").height,
     }
 })

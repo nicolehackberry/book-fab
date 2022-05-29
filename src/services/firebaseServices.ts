@@ -45,7 +45,15 @@
 // };
 
 import { initializeApp, FirebaseApp } from "firebase/app";
-import { collection, getDocs, setDoc, doc, getFirestore, where } from 'firebase/firestore/lite';
+import {
+  collection,
+  getDocs,
+  setDoc,
+  doc,
+  getFirestore,
+  where,
+} from "firebase/firestore/lite";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -73,5 +81,16 @@ export const fetchDataFromFS = async () => {
     return dataList;
   } else {
     return null;
+  }
+};
+
+export const getCurrentLogedInUser = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    return user;
+  } else {
+    return user;
   };
 };
