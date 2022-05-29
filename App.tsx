@@ -7,8 +7,9 @@ import {
 
 import { AppNavigator } from "./src/navigator/AppNavigator";
 import { store } from "./src/redux/store";
-import { fbInit } from "./src/services/firebaseServices";
+//import { fbInit } from "./src/services/firebaseServices";
 import { LoadingScreen } from "./src/components/LoadingScreen";
+import { fbInit } from "./src/services/firebaseServices";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
