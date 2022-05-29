@@ -1,9 +1,8 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
 
-import { useNavigationContainerRef } from "@react-navigation/native";
-import { register } from "../redux/actions/localDataActions";
+import { logInToFirebase, registerUserInFirebase } from "../services/firebaseServices";
 
 type IRegisterScreen = {
   displayName: string;
@@ -82,23 +81,15 @@ export const RegisterScreen: FC = (props: any) => {
         disabled={disabled}
         style={[styles.input]}
         onPress={async () => {
-          console.log("TAG pressed btn");
-          register(
+          await registerUserInFirebase(
             registerState.displayName,
             registerState.email,
             registerState.password
           );
-
-          // await authContext?.register(
-          //   registerState.displayName,
-          //   registerState.email,
-          //   registerState.password
-          // );
-          // authContext?.login(registerState.displayName, registerState.password);
+          logInToFirebase(registerState.email, registerState.password);
         }}
       >
         Button
-        {/* {translate(tokens.screens.loginScreen.registerBtnText)} */}
       </Button>
     </View>
   );

@@ -11,7 +11,14 @@ const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
     <View style={styles.container}>
       <Text>Create Profile?</Text>
       <Button
-        title="On press?"
+        title="Login"
+        onPress={() => {
+          console.log("Btn pressed? ");
+          navigation.navigate("LoginScreen");
+        }}
+      />
+      <Button
+        title="Create Profile"
         onPress={() => {
           console.log("Btn pressed? ");
           navigation.navigate("RegisterScreen");

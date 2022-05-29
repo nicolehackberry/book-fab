@@ -1,6 +1,9 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { StyleSheet, Text, Button, Dimensions, ScrollView } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+import {  useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+
 import { getCurrentLogedInUser } from "../services/firebaseServices";
 import MissingAuthScreen from "./MissingAuthScreen";
 
@@ -14,15 +17,14 @@ interface IProtectedItems {
 }
 
 const ProtectedItems: React.FC<IProtectedItems> = ({ children, navigation }) => {
-  const authStatus = getCurrentLogedInUser();
+  const authStatus = useSelector((state: RootState) => state.localData.loggingInUser);
+
   if (authStatus === null) return <MissingAuthScreen navigation={navigation}/>;
   return <>{children || null}</>;
 };
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
-  useEffect(() => {
-    console.log("TAG USER?: ", getCurrentLogedInUser());
-  }, []);
+
 
   return (
     <ProtectedItems navigation={navigation}>

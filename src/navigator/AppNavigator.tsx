@@ -17,6 +17,7 @@ import { LoadingScreen } from "../components/LoadingScreen";
 import { TabsNavigator } from "./TabsNavigator";
 import CreatorsScreen from "../screens/CreatorsScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 
@@ -40,6 +41,7 @@ const Navigation = () => (
     <RootStack.Screen name="TabsNavigator" component={TabsNavigator} />
     <RootStack.Screen name="CreatorsScreen" component={CreatorsScreen} />
     <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+    <RootStack.Screen name="LoginScreen" component={LoginScreen} />
   </RootStack.Navigator>
 );
 

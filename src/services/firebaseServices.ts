@@ -94,7 +94,7 @@ export const fetchDataFromFS = async () => {
 export const getCurrentLogedInUser = () => {
   const auth = getAuth();
   const user = auth.currentUser;
-
+  
   if (user) {
     return user;
   } else {
@@ -122,4 +122,17 @@ export const registerUserInFirebase = async (
 
   await updateCurrentUser(auth, newUser);
   return createUserResponse;
+};
+
+export const logInToFirebase = async (email: string, password: string): Promise<UserCredential | undefined> => {
+  const auth = getAuth();
+
+  try {
+      const credentialUser = await signInWithEmailAndPassword(auth, email, password);
+      return credentialUser;
+  } catch (error) {
+    console.log('TAG error: ', error);
+    
+      return undefined;
+  };
 };
