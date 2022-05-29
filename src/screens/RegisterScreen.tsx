@@ -65,27 +65,27 @@ export const RegisterScreen: FC = (props: any) => {
 
           <TextInput
             placeholder="Displayname"
-            style={[styles.margin10]}
+            style={[styles.input]}
             onChangeText={(text) => onFieldChange("displayName", text)}
           />
 
           <TextInput
             placeholder="E-mail"
-            style={[styles.margin10]}
+            style={[styles.input]}
             onChangeText={(text) => onFieldChange("email", text)}
           />
 
           <TextInput
             secureTextEntry
             placeholder={"text label"}
-            style={[styles.margin10]}
+            style={[styles.input]}
             onChangeText={(text) => onFieldChange("password", text)}
           />
 
           <TextInput
             secureTextEntry
             placeholder={"text label"}
-            style={[styles.margin10]}
+            style={[styles.input]}
             onChangeText={(text) => onFieldChange("repeatPassword", text)}
           />
         </View>
@@ -95,7 +95,6 @@ export const RegisterScreen: FC = (props: any) => {
         color={disabled ? "gray" : undefined}
         disabled={disabled}
         title="title??"
-        //style={[styles.margin10]}
         onPress={async () => {
           // await authContext?.register(registerState.displayName, registerState.email, registerState.password);
           // authContext?.login(registerState.displayName, registerState.password)
@@ -120,9 +119,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   textInput: {},
-  margin10: {
-    margin: 10,
-  },
   input: {
     height: 40,
     margin: 12,
