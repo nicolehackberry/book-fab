@@ -53,7 +53,14 @@ import {
   getFirestore,
   where,
 } from "firebase/firestore/lite";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateCurrentUser,
+  User,
+  UserCredential,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -92,5 +99,27 @@ export const getCurrentLogedInUser = () => {
     return user;
   } else {
     return user;
+  }
+};
+
+export const registerUserInFirebase = async (
+  displayName: string,
+  email: string,
+  password: string
+): Promise<UserCredential> => {
+  const auth = getAuth();
+  const createUserResponse = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+  const newUser: User = {
+    ...createUserResponse.user,
+    displayName: displayName,
   };
+
+  newUser.email;
+
+  await updateCurrentUser(auth, newUser);
+  return createUserResponse;
 };

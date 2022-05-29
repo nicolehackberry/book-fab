@@ -1,8 +1,9 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import {Button, Card, TextInput} from 'react-native-paper';
+import { Button, Card, TextInput } from "react-native-paper";
 
 import { useNavigationContainerRef } from "@react-navigation/native";
+import { register } from "../redux/actions/localDataActions";
 
 type IRegisterScreen = {
   displayName: string;
@@ -20,12 +21,6 @@ const initialRegisterState: IRegisterScreen = {
 
 export const RegisterScreen: FC = (props: any) => {
   const [disabled, setDisabled] = useState(false);
-  // const [loginState, setLoginState] = useState(false);
-  // const navigation = useNavigationContainerRef();
-  // const authContext = useContext(AuthContext);
-  const [text, onChangeText] = React.useState("Useless Text");
-  const [number, onChangeNumber] = React.useState(null);
-  const [focus, setFocus] = useState(false);
 
   const [registerState, setRegisterState] = useState(initialRegisterState);
 
@@ -67,7 +62,7 @@ export const RegisterScreen: FC = (props: any) => {
           <TextInput
             secureTextEntry
             mode={"outlined"}
-            label={'Lösenord'}
+            label={"Lösenord"}
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("password", text)}
           />
@@ -75,7 +70,7 @@ export const RegisterScreen: FC = (props: any) => {
           <TextInput
             secureTextEntry
             mode={"outlined"}
-            label={'Lösenord'}
+            label={"Lösenord"}
             style={[styles.input]}
             onChangeText={(text) => onFieldChange("repeatPassword", text)}
           />
@@ -87,6 +82,13 @@ export const RegisterScreen: FC = (props: any) => {
         disabled={disabled}
         style={[styles.input]}
         onPress={async () => {
+          console.log("TAG pressed btn");
+          register(
+            registerState.displayName,
+            registerState.email,
+            registerState.password
+          );
+
           // await authContext?.register(
           //   registerState.displayName,
           //   registerState.email,
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
   registerForm: {
     flexDirection: "column",
     width: "100%",
+    padding: 16,
   },
   input: {
     margin: 10,
