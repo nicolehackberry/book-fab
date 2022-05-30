@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -12,6 +12,10 @@ import {
 
 import Paginator from "../components/Paginator";
 import { ICreatorsData } from "./HomeScreen";
+
+interface IRenderItem {
+  item?: any;
+};
 
 const initialState: ICreatorsData = {
   description: "",
@@ -49,7 +53,7 @@ const dataArray = [
   },
 ];
 
-const RenderItem: FC<any> = ({ item }: any) => {
+const RenderItem: FC<IRenderItem> = ({ item }: any) => {
   return (
     <View style={styles.flatlistContainer}>
       <Image style={styles.flatlistImage} source={item.image} />
@@ -62,7 +66,12 @@ const CreatorsScreen = (props: any) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-  return (
+  useEffect(() => {
+    console.log('TAG props.route.params.isProfile: ', props.route.params.isProfile);
+    console.log('TAG props.route.params.docID: ', props.route.params.docID);
+  }, []);
+
+  return props.route.params.creatorData ? (
     <ScrollView style={styles.container}>
       <Image
         style={styles.imageConatiner}
@@ -97,6 +106,10 @@ const CreatorsScreen = (props: any) => {
         <Paginator data={dataArray} scrollX={scrollX} />
       </View>
     </ScrollView>
+  ) : props.route.params.isProfile ? (
+    <Text style={{ color: 'black' }}>props.route.params.isProfile == {props.route.params.isProfile}</Text>
+  ) : (
+    <Text>Allt är null</Text>
   );
 };
 

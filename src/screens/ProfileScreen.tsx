@@ -10,7 +10,11 @@ import {
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { getCurrentLogedInUser } from "../services/firebaseServices";
+import {
+  getCurrentLogedInUser,
+  getCurrentUserData,
+} from "../services/firebaseServices";
+import { ICreatorsData } from "./HomeScreen";
 import MissingAuthScreen from "./MissingAuthScreen";
 
 interface IProfileScreen {
@@ -38,25 +42,35 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   const authContext = useContext(AuthContext);
   const [userData, setUserData] = useState<User>();
+  const [userEmail, setUserEmail] = useState<String>();
+  const [fsData, setFsData] = useState<ICreatorsData | null>();
 
   const fetchCurrentUserData = async () => {
     const data = await getCurrentLogedInUser();
 
-    if(data) {
+    if (data) {
+      //console.log('VAH? data: ', data);
       setUserData(data);
-    };
+    }
   };
 
+  // const fecthCurrentUserData = async (docName: string | null) => {
+  //   console.log('TAG FIRESTORE data of a user: ', await getCurrentUserData(docName));
+  //   console.log('TAG kommer vi hit?');
+
+  // };
+
   useEffect(() => {
-    if(userData) {
-      console.log('TAG lyssnar på user data: ', userData.providerData[0].email);
-    };
+    if (userData) {
+      console.log("TAG lyssnar på user data: ", userData.providerData[0].email);
+      //fecthCurrentUserData(userData.providerData[0].email);
+    }
   }, [userData]);
 
   useEffect(() => {
     fetchCurrentUserData();
   }, []);
-  
+
   return (
     <ProtectedItems navigation={navigation}>
       {/* <TouchableOpacity
@@ -73,16 +87,15 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
       <TouchableOpacity
         style={[styles.button]}
         onPress={() => {
+          fetchCurrentUserData();
 
-          // console.log('TAG current user: ', getCurrentLogedInUser());
-
-          
-
-          // navigation.navigate("CreatorsScreen", {
-          //   creatorData: data,
-          // });
-
-          console.log("TAG pressing Profile");
+          if (userData) {
+            navigation.navigate("CreatorsScreen", {
+              isProfile: true,
+              docID: userData,
+            });
+          }
+          //console.log("TAG pressing Profile");
         }}
       >
         <Text>Profile</Text>
@@ -103,8 +116,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
         style={[styles.button]}
         onPress={() => {
           authContext?.logOut();
-          console.log('TAG logout user');
-          
+          console.log("TAG logout user");
         }}
       >
         <Text>Logout</Text>

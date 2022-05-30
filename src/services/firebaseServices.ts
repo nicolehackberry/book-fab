@@ -52,6 +52,7 @@ import {
   doc,
   getFirestore,
   where,
+  getDoc
 } from "firebase/firestore/lite";
 import {
   getAuth,
@@ -139,4 +140,21 @@ export const logInToFirebase = async (email: string, password: string): Promise<
 
 export const signOutUser = () => {
 
+};
+
+export const getCurrentUserData = async (fsDocumentName: any) => {
+  console.log('TAG TAG TAG: ', fsDocumentName);
+  
+  const db = getFirestore();
+  const query = doc(db, "creatorData", fsDocumentName);
+  const data = await getDoc(query);
+
+  if (data.exists()) {
+    console.log('TAGVSJVSJHABJS: ', data.data());
+    
+    return data.data();
+  } else {
+    console.log('TAGVSJVSJHABJS: ', data.data());
+    return data.data();
+  };
 };
