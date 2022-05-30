@@ -20,7 +20,7 @@ export const AuthContextProvider: FC = (props) => {
     })
 
     const login = async (userName: string, password: string) => {
-        const userCredentials = await logInToFirebase(userName, password)
+        const userCredentials = await logInToFirebase(userName, password);
 
         if (userCredentials) {
             if(userCredentials.user) {

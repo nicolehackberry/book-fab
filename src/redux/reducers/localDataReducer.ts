@@ -2,6 +2,7 @@ import {
   VIEW_ON_BOARDING,
   LOCATIONS_FROM_FS,
   UAE_USER_LOCATION,
+  USER_DATA,
 } from "../actions/localDataActions";
 
 const initialState = {
@@ -29,6 +30,11 @@ export const localDataReducer = (state = initialState, action: any) => {
       return {
         ...state,
         useUserLocation: action.payload,
+      };
+    case USER_DATA:
+      return {
+        ...state,
+        currentUser: action.payload
       };
     default:
       return state;

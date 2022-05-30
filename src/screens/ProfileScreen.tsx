@@ -1,16 +1,16 @@
-import React, { FC, useContext } from "react";
+import { User } from "firebase/auth";
+import React, { FC, useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
-  Button,
   Dimensions,
-  ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 import { AuthContext } from "../contexts/AuthContext";
+import { getCurrentLogedInUser } from "../services/firebaseServices";
 import MissingAuthScreen from "./MissingAuthScreen";
 
 interface IProfileScreen {
@@ -36,6 +36,27 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 };
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
+  const authContext = useContext(AuthContext);
+  const [userData, setUserData] = useState<User>();
+
+  const fetchCurrentUserData = async () => {
+    const data = await getCurrentLogedInUser();
+
+    if(data) {
+      setUserData(data);
+    };
+  };
+
+  useEffect(() => {
+    if(userData) {
+      console.log('TAG lyssnar på user data: ', userData.providerData[0].email);
+    };
+  }, [userData]);
+
+  useEffect(() => {
+    fetchCurrentUserData();
+  }, []);
+  
   return (
     <ProtectedItems navigation={navigation}>
       {/* <TouchableOpacity
@@ -52,7 +73,16 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
       <TouchableOpacity
         style={[styles.button]}
         onPress={() => {
-          console.log("TAG pressing 1");
+
+          // console.log('TAG current user: ', getCurrentLogedInUser());
+
+          
+
+          // navigation.navigate("CreatorsScreen", {
+          //   creatorData: data,
+          // });
+
+          console.log("TAG pressing Profile");
         }}
       >
         <Text>Profile</Text>
@@ -72,7 +102,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
       <TouchableOpacity
         style={[styles.button]}
         onPress={() => {
-          console.log("TAG pressing 1");
+          authContext?.logOut();
+          console.log('TAG logout user');
+          
         }}
       >
         <Text>Logout</Text>

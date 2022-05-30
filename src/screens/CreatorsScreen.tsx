@@ -59,7 +59,6 @@ const RenderItem: FC<any> = ({ item }: any) => {
 
 const CreatorsScreen = (props: any) => {
   const creatorsData = props.route.params.creatorData;
-
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
