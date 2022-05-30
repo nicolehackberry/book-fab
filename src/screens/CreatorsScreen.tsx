@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,11 +11,12 @@ import {
 } from "react-native";
 
 import Paginator from "../components/Paginator";
+import { getCurrentUserData } from "../services/firebaseServices";
 import { ICreatorsData } from "./HomeScreen";
 
 interface IRenderItem {
   item?: any;
-};
+}
 
 const initialState: ICreatorsData = {
   description: "",
@@ -65,10 +66,22 @@ const CreatorsScreen = (props: any) => {
   const creatorsData = props.route.params.creatorData;
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const [dataFromFS, setDataFromFS] = useState();
+
+  const fecthCurrentUserData = async (docName: string | null) => {
+    console.log(
+      "TAG FIRESTORE data of a user: ",
+      await getCurrentUserData(docName)
+    );
+    console.log("TAG kommer vi hit?");
+  };
 
   useEffect(() => {
-    console.log('TAG props.route.params.isProfile: ', props.route.params.isProfile);
-    console.log('TAG props.route.params.docID: ', props.route.params.docID);
+    if(props.route.params.isProfile && props.route.params.docID){
+      fecthCurrentUserData(props.route.params.docID.providerData[0].email);
+    };
+    // console.log('TAG props.route.params.isProfile: ', props.route.params.isProfile);
+    // console.log('TAG props.route.params.docID: ', props.route.params.docID);
   }, []);
 
   return props.route.params.creatorData ? (
@@ -107,7 +120,9 @@ const CreatorsScreen = (props: any) => {
       </View>
     </ScrollView>
   ) : props.route.params.isProfile ? (
-    <Text style={{ color: 'black' }}>props.route.params.isProfile == {props.route.params.isProfile}</Text>
+    <Text style={{ color: "black" }}>
+      props.route.params.isProfile == {props.route.params.isProfile}
+    </Text>
   ) : (
     <Text>Allt är null</Text>
   );
