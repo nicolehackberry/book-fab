@@ -3,6 +3,7 @@ import {
   LOCATIONS_FROM_FS,
   UAE_USER_LOCATION,
   USER_DATA,
+  USER_LOCATION,
 } from "../actions/localDataActions";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   registerUser: null,
   loggingInUser: null,
   currentUser: null,
+  userLocation: null,
 };
 
 export const localDataReducer = (state = initialState, action: any) => {
@@ -34,7 +36,12 @@ export const localDataReducer = (state = initialState, action: any) => {
     case USER_DATA:
       return {
         ...state,
-        currentUser: action.payload
+        currentUser: action.payload,
+      };
+    case USER_LOCATION:
+      return {
+        ...state,
+        userLocation: action.payload,
       };
     default:
       return state;

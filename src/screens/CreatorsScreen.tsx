@@ -8,9 +8,13 @@ import {
   ScrollView,
   FlatList,
   Animated,
+  TextInput,
 } from "react-native";
+import { Button } from "react-native-paper";
+import { useSelector } from "react-redux";
 
 import Paginator from "../components/Paginator";
+import { RootState } from "../redux/store";
 import { getCurrentUserData } from "../services/firebaseServices";
 import { ICreatorsData } from "./HomeScreen";
 
@@ -66,7 +70,35 @@ const CreatorsScreen = (props: any) => {
   const creatorsData = props.route.params.creatorData;
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const userLocation = useSelector((state: RootState) => state.localData.userLocation);
+  const creatorData = props.route.params.creatorData
+    ? props.route.params.creatorData
+    : undefined;
+  const [formValues, setFormValues] = useState<ICreatorsData>(
+    creatorsData ? creatorsData : initialState
+  );
   const [dataFromFS, setDataFromFS] = useState();
+
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const showHideDialog = () => setDialogVisible(!dialogVisible);
+
+  useEffect(() => {
+    console.log("TAG lyssnar på form values: ", formValues);
+  }, [formValues]);
+
+  useEffect(() => {
+    //console.log("TAG lyssnar på form values: ", userLocation);
+    if(userLocation) {
+      onFormItemChange('userLocation', userLocation)
+    }
+  }, [userLocation]);
+
+  const onFormItemChange = (field: string, value: any) => {
+    setFormValues({
+      ...formValues,
+      [field]: value,
+    });
+  };
 
   const fecthCurrentUserData = async (docName: string | null) => {
     console.log(
@@ -77,9 +109,9 @@ const CreatorsScreen = (props: any) => {
   };
 
   useEffect(() => {
-    if(props.route.params.isProfile && props.route.params.docID){
+    if (props.route.params.isProfile && props.route.params.docID) {
       fecthCurrentUserData(props.route.params.docID.providerData[0].email);
-    };
+    }
     // console.log('TAG props.route.params.isProfile: ', props.route.params.isProfile);
     // console.log('TAG props.route.params.docID: ', props.route.params.docID);
   }, []);
@@ -120,9 +152,118 @@ const CreatorsScreen = (props: any) => {
       </View>
     </ScrollView>
   ) : props.route.params.isProfile ? (
-    <Text style={{ color: "black" }}>
-      props.route.params.isProfile == {props.route.params.isProfile}
-    </Text>
+    <ScrollView style={styles.container}>
+      <Image
+        style={styles.imageConatiner}
+        source={require("../assets/nailstwo.jpg")}
+      />
+
+      <View style={styles.descriptionContainer}>
+        <TextInput
+          //mode="outlined"
+          //label={"Label 1"}
+          editable
+          multiline
+          placeholder={
+            creatorData ? formValues.expertise : "Enter you'r area of expertise"
+          }
+          defaultValue={creatorData ? formValues.expertise : ""}
+          //right={<TextInput.Icon name="label-outline" onPress={() => {}} />}
+          onChangeText={(text) => onFormItemChange("expertise", text)}
+          style={styles.textInput}
+        />
+
+        <TextInput
+          //mode="outlined"
+          //label={'Label 2'}
+          editable
+          multiline
+          placeholder={
+            creatorsData ? formValues.name : "Enter you'r display ame"
+          }
+          defaultValue={creatorsData ? formValues.name : ""}
+          //right={<TextInput.Icon name="script-outline" onPress={() => {}} />}
+          onChangeText={(text) => onFormItemChange("name", text)}
+          style={styles.textInput}
+        />
+
+        <TextInput
+          //mode="outlined"
+          //label={'Label 2'}
+          editable
+          multiline
+          placeholder={
+            creatorsData
+              ? formValues.description
+              : "Enter a description of what you do"
+          }
+          defaultValue={creatorsData ? formValues.description : ""}
+          //right={<TextInput.Icon name="script-outline" onPress={() => {}} />}
+          onChangeText={(text) => onFormItemChange("description", text)}
+          style={styles.textInput}
+        />
+
+        <TextInput
+          //mode="outlined"
+          //label={'Label 2'}
+          editable
+          multiline
+          placeholder={creatorsData ? formValues.email : "E-mail"}
+          defaultValue={creatorsData ? formValues.email : ""}
+          //right={<TextInput.Icon name="script-outline" onPress={() => {}} />}
+          onChangeText={(text) => onFormItemChange("email", text)}
+          style={styles.textInput}
+        />
+
+        {/* <TextInput
+          //mode="outlined"
+          //label={'Label 2'}
+          editable
+          multiline
+          keyboardType='numeric'
+          placeholder={creatorsData ? formValues.userLocation.latitude : "E-mail"}
+          defaultValue={creatorsData ? formValues.email : ""}
+          //right={<TextInput.Icon name="script-outline" onPress={() => {}} />}
+          onChangeText={(text) => onFormItemChange("email", text)}
+          style={styles.textInput}
+        /> */}
+
+
+        {/* <Text style={styles.titleText}>{creatorsData.expertise}</Text>
+        <Text style={styles.underText}>{creatorsData.name}</Text>
+        <Text style={styles.descriptionText}>{creatorsData.description}</Text>
+
+        <Text style={styles.underText}>{creatorsData.email}</Text> */}
+      </View>
+
+      <View style={{ flex: 3, alignItems: "center" }}>
+        <FlatList
+          data={dataArray}
+          renderItem={({ item }) => <RenderItem item={item} />}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled
+          bounces={false}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            {
+              useNativeDriver: false,
+            }
+          )}
+          scrollEventThrottle={32}
+          viewabilityConfig={viewConfig}
+        />
+        <Paginator data={dataArray} scrollX={scrollX} />
+      </View>
+
+      <Button
+        style={styles.button}
+        mode={"contained"}
+        onPress={() => showHideDialog()}
+      >
+        Save changes
+      </Button>
+    </ScrollView>
   ) : (
     <Text>Allt är null</Text>
   );
@@ -168,5 +309,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: Dimensions.get("window").width,
     height: 500,
+  },
+  textInput: {
+    margin: 10,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    marginTop: 25,
+    justifyContent: "space-evenly",
+  },
+  button: {
+    margin: 10,
+    marginBottom: 50,
   },
 });

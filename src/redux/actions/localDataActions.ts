@@ -4,6 +4,7 @@ export const VIEW_ON_BOARDING = "IS_FIRST_TIME_USER";
 export const LOCATIONS_FROM_FS = "LOCATIONS_FROM_FS";
 export const UAE_USER_LOCATION = "UAE_USER_LOCATION";
 export const USER_DATA = "USER_DATA";
+export const USER_LOCATION = 'USER_LOCATION';
 
 export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   type: VIEW_ON_BOARDING,
@@ -25,6 +26,18 @@ export const useCurrentUserLocation = (permissionIsGranted: string) => {
   return {
     type: UAE_USER_LOCATION,
     payload: permissionIsGranted,
+  };
+};
+
+export const userLocation = (lat: number, long: number) => {
+  const userLocation = {
+    latitude: lat,
+    longitude: long
+  };
+
+  return {
+    type: USER_LOCATION,
+    payload: userLocation,
   };
 };
 

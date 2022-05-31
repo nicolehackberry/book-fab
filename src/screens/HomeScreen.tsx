@@ -9,6 +9,7 @@ import {
   viewedOnboarding,
   getCreatorsDataFS,
   useCurrentUserLocation,
+  userLocation,
 } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
 import MapMarker from "../components/MapMarker";
@@ -118,6 +119,11 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
               onRegionChange={onRegionChange}
               showsUserLocation={useUserLocation === 'true' ? true : false}
               onUserLocationChange={(e) => {
+                if(useUserLocation) {
+                  dispatch(userLocation(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude))
+
+                  
+                };
                 // console.log(
                 //   "TAG on user location change: ",
                 //   e.nativeEvent.coordinate
