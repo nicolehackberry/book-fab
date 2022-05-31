@@ -64,7 +64,9 @@ export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
                     color={'#fff'}
                     icon={'draw'}
                     onPress={() => {
-                        navigation.navigate('RegisterScreen')
+                        navigation.navigate("RegisterScreen", {
+                            navigation: navigation,
+                          });
                     }}>
                         Test 2
                 </Button>

@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState, useContext } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Button, Card, TextInput } from "react-native-paper";
+import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -11,6 +12,10 @@ type IRegisterScreen = {
   repeatPassword: string;
 };
 
+interface INav {
+  navigation: NativeStackNavigationProp<any, any>;
+}
+
 const initialRegisterState: IRegisterScreen = {
   displayName: "",
   email: "",
@@ -18,7 +23,7 @@ const initialRegisterState: IRegisterScreen = {
   repeatPassword: "",
 };
 
-export const RegisterScreen: FC = (props: any) => {
+export const RegisterScreen: FC<INav> = ({ navigation }) => {
   const authContext = useContext(AuthContext);
   const [disabled, setDisabled] = useState(false);
   const [registerState, setRegisterState] = useState(initialRegisterState);
@@ -87,9 +92,12 @@ export const RegisterScreen: FC = (props: any) => {
             registerState.password
           );
           authContext?.login(registerState.displayName, registerState.password);
+          if (authContext?.isUserSignedIn) {
+            navigation.navigate("ProfileScreen");
+          }
         }}
       >
-        Button
+        Create account
       </Button>
     </View>
   );

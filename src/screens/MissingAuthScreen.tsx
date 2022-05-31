@@ -21,7 +21,9 @@ const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
         title="Create Profile"
         onPress={() => {
           console.log("Btn pressed? ");
-          navigation.navigate("RegisterScreen");
+          navigation.navigate("RegisterScreen", {
+            navigation: navigation,
+          });
         }}
       />
     </View>
