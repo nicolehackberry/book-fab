@@ -12,10 +12,11 @@ import {
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useSelector } from "react-redux";
+import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 import Paginator from "../components/Paginator";
 import { RootState } from "../redux/store";
-import { getCurrentUserData } from "../services/firebaseServices";
+import { getCurrentUserData, setUserData } from "../services/firebaseServices";
 import { ICreatorsData } from "./HomeScreen";
 
 interface IRenderItem {
@@ -68,28 +69,33 @@ const RenderItem: FC<IRenderItem> = ({ item }: any) => {
 
 const CreatorsScreen = (props: any) => {
   const creatorsData = props.route.params.creatorData;
+  const userId = props.route.params.isProfile
+    ? props.route.params.docID.providerData[0].email
+    : "";
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-  const userLocation = useSelector((state: RootState) => state.localData.userLocation);
+  const userLocation = useSelector(
+    (state: RootState) => state.localData.userLocation
+  );
   const creatorData = props.route.params.creatorData
     ? props.route.params.creatorData
     : undefined;
   const [formValues, setFormValues] = useState<ICreatorsData>(
     creatorsData ? creatorsData : initialState
   );
-  const [dataFromFS, setDataFromFS] = useState();
+  const [test, setTest] = useState(false);
 
   const [dialogVisible, setDialogVisible] = useState(false);
   const showHideDialog = () => setDialogVisible(!dialogVisible);
 
-  useEffect(() => {
-    console.log("TAG lyssnar på form values: ", formValues);
-  }, [formValues]);
+  const setUserDataToFS = (id: string, data: ICreatorsData) =>
+    setUserData(id, data);
 
   useEffect(() => {
     //console.log("TAG lyssnar på form values: ", userLocation);
-    if(userLocation) {
-      onFormItemChange('userLocation', userLocation)
+    if (userLocation) {
+      onFormItemChange("userLocation", userLocation);
+      setTest(true);
     }
   }, [userLocation]);
 
@@ -112,7 +118,7 @@ const CreatorsScreen = (props: any) => {
     if (props.route.params.isProfile && props.route.params.docID) {
       fecthCurrentUserData(props.route.params.docID.providerData[0].email);
     }
-    // console.log('TAG props.route.params.isProfile: ', props.route.params.isProfile);
+    console.log('TAG props.route.params.isProfile: ', props.route.params);
     // console.log('TAG props.route.params.docID: ', props.route.params.docID);
   }, []);
 
@@ -228,7 +234,6 @@ const CreatorsScreen = (props: any) => {
           style={styles.textInput}
         /> */}
 
-
         {/* <Text style={styles.titleText}>{creatorsData.expertise}</Text>
         <Text style={styles.underText}>{creatorsData.name}</Text>
         <Text style={styles.descriptionText}>{creatorsData.description}</Text>
@@ -257,9 +262,13 @@ const CreatorsScreen = (props: any) => {
       </View>
 
       <Button
+        disabled={test ? false : true}
         style={styles.button}
         mode={"contained"}
-        onPress={() => showHideDialog()}
+        onPress={() => {
+          setUserDataToFS(userId, formValues);
+          props.route.params.navigation.navigate("ProfileScreen");
+        }}
       >
         Save changes
       </Button>

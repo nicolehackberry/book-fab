@@ -93,6 +93,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
             navigation.navigate("CreatorsScreen", {
               isProfile: true,
               docID: userData,
+              navigation: navigation
             });
           }
           //console.log("TAG pressing Profile");

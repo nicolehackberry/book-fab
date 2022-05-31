@@ -6,7 +6,7 @@ import {
   doc,
   getFirestore,
   where,
-  getDoc
+  getDoc,
 } from "firebase/firestore/lite";
 import {
   getAuth,
@@ -16,6 +16,9 @@ import {
   User,
   UserCredential,
 } from "firebase/auth";
+import { onSnapshot } from "firebase/firestore";
+
+import { ICreatorsData } from "../screens/HomeScreen";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCW2NI3OUhrOIBuxHCZWz6Ryfq7fPaH0QM",
@@ -49,7 +52,7 @@ export const fetchDataFromFS = async () => {
 export const getCurrentLogedInUser = () => {
   const auth = getAuth();
   const user = auth.currentUser;
-  
+
   if (user) {
     return user;
   } else {
@@ -79,36 +82,51 @@ export const registerUserInFirebase = async (
   return createUserResponse;
 };
 
-export const logInToFirebase = async (email: string, password: string): Promise<UserCredential | undefined> => {
+export const logInToFirebase = async (
+  email: string,
+  password: string
+): Promise<UserCredential | undefined> => {
   const auth = getAuth();
 
   try {
-      const credentialUser = await signInWithEmailAndPassword(auth, email, password);
-      return credentialUser;
+    const credentialUser = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return credentialUser;
   } catch (error) {
-    console.log('TAG error: ', error);
-    
-      return undefined;
-  };
+    console.log("TAG error: ", error);
+
+    return undefined;
+  }
 };
 
-export const signOutUser = () => {
-
-};
+export const signOutUser = () => {};
 
 export const getCurrentUserData = async (fsDocumentName: any) => {
-  console.log('TAG TAG TAG: ', fsDocumentName);
-  
+  console.log("TAG TAG TAG: ", fsDocumentName);
   const db = getFirestore();
+  //import { doc, onSnapshot } from "firebase/firestore";
+
+  onSnapshot(doc(db, "creatorData"), (doc) => {
+    console.log("Current data: ", doc.data());
+  });
+
   const query = doc(db, "creatorData", fsDocumentName);
   const data = await getDoc(query);
 
   if (data.exists()) {
-    console.log('TAGVSJVSJHABJS: ', data.data());
-    
+    console.log("TAGVSJVSJHABJS: ", data.data());
+
     return data.data();
   } else {
-    console.log('TAGVSJVSJHABJS: ', data.data());
+    console.log("TAGVSJVSJHABJS: ", data.data());
     return data.data();
-  };
+  }
+};
+
+export const setUserData = (userId: string, data: ICreatorsData) => {
+  const db = getFirestore();
+  setDoc(doc(db, "creatorData", userId), data);
 };
