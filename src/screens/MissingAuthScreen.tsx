@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { StyleSheet, View, Text, Dimensions, Button } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+import { NoUserComponent } from "../components/NoUserComponent";
 
 interface IMissingAuthScreen {
   navigation: NativeStackNavigationProp<any, any>;
@@ -9,7 +10,7 @@ interface IMissingAuthScreen {
 const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text>Create Profile?</Text>
+      <NoUserComponent />
       <Button
         title="Login"
         onPress={() => {
