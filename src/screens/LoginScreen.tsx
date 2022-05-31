@@ -75,7 +75,11 @@ export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
                     mode={'contained'}
                     icon={'login'}
                     onPress={async () => {
-                        authContext?.login(userState.userName, userState.password)
+                        authContext?.login(userState.userName, userState.password);
+
+                        if(authContext?.isUserSignedIn){
+                            navigation.navigate("ProfileScreen");
+                        };
                     }}>Test 3</Button>
             </View>
         </View>

@@ -102,7 +102,10 @@ export const logInToFirebase = async (
   }
 };
 
-export const signOutUser = () => {};
+export const signOutUser = async () => {
+  const auth = getAuth();
+  return await auth.signOut();
+};
 
 export const getCurrentUserData = async (fsDocumentName: any) => {
   console.log("TAG TAG TAG: ", fsDocumentName);

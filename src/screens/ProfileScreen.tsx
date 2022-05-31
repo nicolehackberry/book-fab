@@ -34,9 +34,11 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 }) => {
   const authContext = useContext(AuthContext);
   const authStatus = authContext?.isUserSignedIn;
+  console.log('TAG AUTH STATUS: ', authStatus);
+  
 
-  if (authStatus === null) return <MissingAuthScreen navigation={navigation} />;
-  return <>{children || null}</>;
+  if (authStatus === false) return <MissingAuthScreen navigation={navigation} />;
+  return <>{children || false}</>;
 };
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
@@ -117,7 +119,6 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
         style={[styles.button]}
         onPress={() => {
           authContext?.logOut();
-          console.log("TAG logout user");
         }}
       >
         <Text>Logout</Text>

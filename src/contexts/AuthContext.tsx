@@ -37,9 +37,11 @@ export const AuthContextProvider: FC = (props) => {
     }
 
     const logOut = async () => {
-        const signOut = await signOutUser()
+        await signOutUser();
+        console.log('TGATATGATAGTAG: ', signOutUser());
+        
         setIsUserSignedIn(false);
-    }
+    };
 
     return(
         <AuthContext.Provider value={{isUserSignedIn, register, login, logOut}}>
