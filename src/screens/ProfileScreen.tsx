@@ -38,7 +38,7 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
   
 
   if (authStatus === false) return <MissingAuthScreen navigation={navigation} />;
-  return <>{children || false}</>;
+  return <>{children || null}</>;
 };
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {

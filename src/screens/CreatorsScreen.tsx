@@ -18,6 +18,7 @@ import Paginator from "../components/Paginator";
 import { RootState } from "../redux/store";
 import { getCurrentUserData, setUserData } from "../services/firebaseServices";
 import { ICreatorsData } from "./HomeScreen";
+import { ErrorComponent } from "../components/ErrorComponent";
 
 interface IRenderItem {
   item?: any;
@@ -274,7 +275,7 @@ const CreatorsScreen = (props: any) => {
       </Button>
     </ScrollView>
   ) : (
-    <Text>Allt är null</Text>
+    <ErrorComponent />
   );
 };
 
