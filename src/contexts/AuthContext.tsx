@@ -38,7 +38,7 @@ export const AuthContextProvider: FC = (props) => {
 
     const logOut = async () => {
         await signOutUser();
-        console.log('TGATATGATAGTAG: ', signOutUser());
+        //console.log('TGATATGATAGTAG: ', signOutUser());
         
         setIsUserSignedIn(false);
     };

@@ -16,6 +16,7 @@ import { Button } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import * as ImagePicker from "expo-image-picker";
 
 import Paginator from "../components/Paginator";
 import { RootState } from "../redux/store";
@@ -115,16 +116,10 @@ const CreatorsScreen = (props: any) => {
     creatorsData ? creatorsData : initialState
   );
   const [test, setTest] = useState(false);
+  const [image, setImage] = useState<string>();
 
   const setUserDataToFS = (id: string, data: ICreatorsData) =>
     setUserData(id, data);
-
-  useEffect(() => {
-    if (userLocation) {
-      onFormItemChange("userLocation", userLocation);
-      setTest(true);
-    }
-  }, [userLocation]);
 
   const onFormItemChange = (field: string, value: any) => {
     setFormValues({
@@ -132,6 +127,35 @@ const CreatorsScreen = (props: any) => {
       [field]: value,
     });
   };
+
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log('TAG RESULT: ', result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      onFormItemChange("profileImage", result.uri)
+    }
+  };
+
+  useEffect(() => {
+    console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
+    
+  }, [formValues])
+
+  useEffect(() => {
+    if (userLocation) {
+      onFormItemChange("userLocation", userLocation);
+      setTest(true);
+    }
+  }, [userLocation]);
 
   return props.route.params.creatorData ? (
     <ScrollView style={styles.container}>
@@ -208,8 +232,8 @@ const CreatorsScreen = (props: any) => {
         style={styles.imageConatiner}
         resizeMode={"cover"}
         source={
-          creatorsData
-            ? formValues.profileImage
+          creatorsData || formValues.profileImage !== initialState.profileImage
+            ? { uri: formValues.profileImage }
             : require("../assets/nailstwo.jpg")
         }
       >
@@ -220,6 +244,7 @@ const CreatorsScreen = (props: any) => {
           <TouchableOpacity
             style={{ alignItems: "center" }}
             onPress={() => {
+              pickImage();
               console.log("TAG pressing 1");
             }}
           >
@@ -327,6 +352,8 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   imageConatiner: {
+    minHeight: 300,
+    minWidth: 150,
     height: 300,
     flex: 1,
     resizeMode: "cover",
