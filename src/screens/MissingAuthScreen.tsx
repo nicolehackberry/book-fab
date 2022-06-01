@@ -1,7 +1,10 @@
 import React, { FC } from "react";
-import { StyleSheet, View, Text, Dimensions, Button } from "react-native";
+import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
+import { Button } from "react-native-paper";
+
 import { NoUserComponent } from "../components/NoUserComponent";
+import { primaryColor } from "../utils/Colors";
 
 interface IMissingAuthScreen {
   navigation: NativeStackNavigationProp<any, any>;
@@ -10,23 +13,32 @@ interface IMissingAuthScreen {
 const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <NoUserComponent />
-      <Button
-        title="Login"
-        onPress={() => {
-          console.log("Btn pressed? ");
-          navigation.navigate("LoginScreen");
-        }}
-      />
-      <Button
-        title="Create Profile"
-        onPress={() => {
-          console.log("Btn pressed? ");
-          navigation.navigate("RegisterScreen", {
-            navigation: navigation,
-          });
-        }}
-      />
+      <NoUserComponent>
+        <View style={styles.buttonRow}>
+          <Button
+            color={"#ffebee"}
+            mode={"contained"}
+            onPress={() => {
+              console.log("Btn pressed? ");
+              navigation.navigate("LoginScreen");
+            }}
+          >
+            Login
+          </Button>
+          <Button
+            color={primaryColor}
+            mode={"contained"}
+            onPress={() => {
+              console.log("Btn pressed? ");
+              navigation.navigate("RegisterScreen", {
+                navigation: navigation,
+              });
+            }}
+          >
+            Create profile
+          </Button>
+        </View>
+      </NoUserComponent>
     </View>
   );
 };
@@ -38,8 +50,13 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "pink",
+    backgroundColor: "#ffebee",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    marginTop: 25,
+    justifyContent: "space-evenly",
   },
 });

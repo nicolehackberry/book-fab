@@ -61,14 +61,13 @@ export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
             <View style={styles.buttonRow}>
                 <Button
                     mode={'contained'}
-                    color={'#fff'}
-                    icon={'draw'}
+                    color={'#ffebee'}
                     onPress={() => {
                         navigation.navigate("RegisterScreen", {
                             navigation: navigation,
                           });
                     }}>
-                        Test 2
+                        Register
                 </Button>
 
                 <Button
@@ -82,7 +81,7 @@ export const LoginScreen: FC<LoginScreenInterface> = ({navigation}) => {
                         if(authContext?.isUserSignedIn){
                             navigation.navigate("ProfileScreen");
                         };
-                    }}>Test 3</Button>
+                    }}>Login</Button>
             </View>
         </View>
     )

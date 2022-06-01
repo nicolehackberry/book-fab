@@ -3,7 +3,11 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { Card } from "react-native-paper";
 import { secondaryColor } from "../utils/Colors";
 
-export const NoUserComponent: FC = () => {
+interface IChildren {
+  children: React.ReactNode;
+}
+
+export const NoUserComponent: FC<IChildren> = ({ children }) => {
   return (
     <View style={[styles.container, { backgroundColor: secondaryColor }]}>
       <Card style={styles.card}>
@@ -18,6 +22,7 @@ export const NoUserComponent: FC = () => {
         <Text style={[styles.text, { fontSize: 16 }]}>
           would you like to becoma a creator to proceed to the profile screen?
         </Text>
+        {children}
       </Card>
     </View>
   );
@@ -25,12 +30,9 @@ export const NoUserComponent: FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-      height: '30%',
-
+      height: 200,
   },
   card: {
-    alignItems: "center",
-    justifyContent: "center",
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 10,

@@ -54,9 +54,7 @@ const LocationFetcher: FC<ILocation> = ({ setLocation }) => {
   }
 
   return (
-    <View>
-      <Text style={{ padding: 36, backgroundColor: "pink" }}>{text}</Text>
-    </View>
+    <></>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Button, Text} from "react-native";
+import { StyleSheet, View, Dimensions} from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
@@ -138,8 +138,6 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                   <MapMarker key={index} data={item} navigation={navigation} />
                 )
               )}
-
-              {/* <View style={{ height: 300, width: 300, backgroundColor: 'purple' }}><Text>Testar denna div</Text></View> */}
             </MapView>
           </>
         ) : (
@@ -151,7 +149,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
         <LocationFetcher
           setLocation={(value: LocationObject) => setLocation(value)}
         />
-        <Button title="Press Me!" onPress={clearOnboarding} />
+        {/* <Button title="Press Me!" onPress={clearOnboarding} /> */}
       </View>
     )
   );
@@ -161,14 +159,13 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
     justifyContent: "center",
-    height: 500,
+
   },
   map: {
-    padding: 15,
     justifyContent: "center",
-    height: 700,
     backgroundColor: "purple",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });
