@@ -27,6 +27,8 @@ export interface ICreatorsData {
     expertise: string;
     id: string;
     name: string;
+    profileImage: string;
+    images: string[];
     socialMedia: {
       facebook: string;
       instagram: string;

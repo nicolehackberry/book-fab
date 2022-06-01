@@ -9,9 +9,13 @@ import {
   FlatList,
   Animated,
   TextInput,
+  ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useSelector } from "react-redux";
+import { Entypo } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 import Paginator from "../components/Paginator";
 import { RootState } from "../redux/store";
@@ -29,6 +33,8 @@ const initialState: ICreatorsData = {
   expertise: "",
   id: "",
   name: "",
+  profileImage: "",
+  images: [""],
   socialMedia: {
     facebook: "",
     instagram: "",
@@ -42,21 +48,11 @@ const initialState: ICreatorsData = {
 };
 
 const dataArray = [
-  {
-    image: require("../assets/nailstwo.jpg"),
-  },
-  {
-    image: require("../assets/nailstwo.jpg"),
-  },
-  {
-    image: require("../assets/nailstwo.jpg"),
-  },
-  {
-    image: require("../assets/nailstwo.jpg"),
-  },
-  {
-    image: require("../assets/nailstwo.jpg"),
-  },
+  require("../assets/nailstwo.jpg"),
+  require("../assets/nailstwo.jpg"),
+  require("../assets/nailstwo.jpg"),
+  require("../assets/nailstwo.jpg"),
+  require("../assets/nailstwo.jpg"),
 ];
 
 const RenderItem: FC<IRenderItem> = ({ item }: any) => {
@@ -70,7 +66,34 @@ const RenderItem: FC<IRenderItem> = ({ item }: any) => {
 const RenderDefaultItem: FC<IRenderItem> = ({ item }: any) => {
   return (
     <View style={styles.flatlistContainer}>
-      <Image style={styles.flatlistImage} source={item.image} />
+      <Image style={styles.flatlistImage} source={item} />
+    </View>
+  );
+};
+
+const RenderPickImagesItem: FC<IRenderItem> = ({ item }: any) => {
+  return (
+    <View style={styles.flatlistContainer}>
+      <ImageBackground
+        style={styles.flatlistImage}
+        resizeMode={"cover"}
+        source={item.image}
+      >
+        <LinearGradient
+          colors={["#00000000", "#000000"]}
+          style={styles.gradient}
+        >
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            onPress={() => {
+              console.log("TAG pressing 1");
+            }}
+          >
+            <Text style={{ color: "white" }}>Add Images</Text>
+            <Entypo name="images" size={24} color="white" />
+          </TouchableOpacity>
+        </LinearGradient>
+      </ImageBackground>
     </View>
   );
 };
@@ -92,7 +115,6 @@ const CreatorsScreen = (props: any) => {
     creatorsData ? creatorsData : initialState
   );
   const [test, setTest] = useState(false);
-
 
   const setUserDataToFS = (id: string, data: ICreatorsData) =>
     setUserData(id, data);
@@ -182,10 +204,30 @@ const CreatorsScreen = (props: any) => {
     </ScrollView>
   ) : props.route.params.isProfile ? (
     <ScrollView style={styles.container}>
-      <Image
+      <ImageBackground
         style={styles.imageConatiner}
-        source={require("../assets/nailstwo.jpg")}
-      />
+        resizeMode={"cover"}
+        source={
+          creatorsData
+            ? formValues.profileImage
+            : require("../assets/nailstwo.jpg")
+        }
+      >
+        <LinearGradient
+          colors={["#00000000", "#000000"]}
+          style={styles.gradient}
+        >
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            onPress={() => {
+              console.log("TAG pressing 1");
+            }}
+          >
+            <Text style={{ color: "white" }}>Add profile image</Text>
+            <Entypo name="image" size={24} color="white" />
+          </TouchableOpacity>
+        </LinearGradient>
+      </ImageBackground>
 
       <View style={styles.descriptionContainer}>
         <TextInput
@@ -235,8 +277,8 @@ const CreatorsScreen = (props: any) => {
 
       <View style={{ flex: 3, alignItems: "center" }}>
         <FlatList
-          data={dataArray}
-          renderItem={({ item }) => <RenderDefaultItem item={item} />}
+          data={creatorsData ? formValues.images : dataArray}
+          renderItem={({ item }) => <RenderPickImagesItem item={item} />}
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
@@ -282,7 +324,15 @@ const styles = StyleSheet.create({
   },
   imageConatiner: {
     height: 300,
+    flex: 1,
+    resizeMode: "cover",
     width: "100%",
+  },
+  gradient: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   titleText: {
     fontSize: 24,
