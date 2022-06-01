@@ -63,6 +63,14 @@ const dataArray = [
 const RenderItem: FC<IRenderItem> = ({ item }: any) => {
   return (
     <View style={styles.flatlistContainer}>
+      <Image style={styles.flatlistImage} source={{ uri: item }} />
+    </View>
+  );
+};
+
+const RenderDefaultItem: FC<IRenderItem> = ({ item }: any) => {
+  return (
+    <View style={styles.flatlistContainer}>
       <Image style={styles.flatlistImage} source={item.image} />
     </View>
   );
@@ -119,16 +127,23 @@ const CreatorsScreen = (props: any) => {
     if (props.route.params.isProfile && props.route.params.docID) {
       fecthCurrentUserData(props.route.params.docID.providerData[0].email);
     }
-    console.log('TAG props.route.params.isProfile: ', props.route.params);
+    console.log("TAG props.route.params.isProfile: ", props.route.params);
     // console.log('TAG props.route.params.docID: ', props.route.params.docID);
   }, []);
 
   return props.route.params.creatorData ? (
     <ScrollView style={styles.container}>
-      <Image
-        style={styles.imageConatiner}
-        source={require("../assets/nailstwo.jpg")}
-      />
+      {creatorsData.profileImage ? (
+        <Image
+          style={styles.imageConatiner}
+          source={{ uri: creatorsData.profileImage }}
+        />
+      ) : (
+        <Image
+          style={styles.imageConatiner}
+          source={require("../assets/nailstwo.jpg")}
+        />
+      )}
 
       <View style={styles.descriptionContainer}>
         <Text style={styles.titleText}>{creatorsData.expertise}</Text>
@@ -139,23 +154,50 @@ const CreatorsScreen = (props: any) => {
       </View>
 
       <View style={{ flex: 3, alignItems: "center" }}>
-        <FlatList
-          data={dataArray}
-          renderItem={({ item }) => <RenderItem item={item} />}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          bounces={false}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            {
-              useNativeDriver: false,
-            }
-          )}
-          scrollEventThrottle={32}
-          viewabilityConfig={viewConfig}
+        {creatorsData.images ? (
+          <>
+            <FlatList
+              data={creatorsData.images}
+              renderItem={({ item }) => <RenderItem item={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              bounces={false}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                {
+                  useNativeDriver: false,
+                }
+              )}
+              scrollEventThrottle={32}
+              viewabilityConfig={viewConfig}
+            />
+          </>
+        ) : (
+          <>
+            <FlatList
+              data={dataArray}
+              renderItem={({ item }) => <RenderDefaultItem item={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              pagingEnabled
+              bounces={false}
+              onScroll={Animated.event(
+                [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+                {
+                  useNativeDriver: false,
+                }
+              )}
+              scrollEventThrottle={32}
+              viewabilityConfig={viewConfig}
+            />
+          </>
+        )}
+
+        <Paginator
+          data={creatorsData.images ? creatorsData.images : dataArray}
+          scrollX={scrollX}
         />
-        <Paginator data={dataArray} scrollX={scrollX} />
       </View>
     </ScrollView>
   ) : props.route.params.isProfile ? (
