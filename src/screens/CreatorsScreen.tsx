@@ -34,7 +34,7 @@ const initialState: ICreatorsData = {
   id: "",
   name: "",
   profileImage: "",
-  images: [""],
+  images: [require("../assets/nailstwo.jpg")],
   socialMedia: {
     facebook: "",
     instagram: "",
@@ -77,7 +77,7 @@ const RenderPickImagesItem: FC<IRenderItem> = ({ item }: any) => {
       <ImageBackground
         style={styles.flatlistImage}
         resizeMode={"cover"}
-        source={item.image}
+        source={item}
       >
         <LinearGradient
           colors={["#00000000", "#000000"]}
@@ -277,7 +277,7 @@ const CreatorsScreen = (props: any) => {
 
       <View style={{ flex: 3, alignItems: "center" }}>
         <FlatList
-          data={creatorsData ? formValues.images : dataArray}
+          data={creatorsData ? formValues.images : formValues.images}
           renderItem={({ item }) => <RenderPickImagesItem item={item} />}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -292,7 +292,11 @@ const CreatorsScreen = (props: any) => {
           scrollEventThrottle={32}
           viewabilityConfig={viewConfig}
         />
-        <Paginator data={dataArray} scrollX={scrollX} />
+        {creatorsData ? (
+          <Paginator data={creatorsData.images} scrollX={scrollX} />
+        ) : (
+          <></>
+        )}
       </View>
 
       <Button
