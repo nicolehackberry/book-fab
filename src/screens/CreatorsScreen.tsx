@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
@@ -23,20 +23,24 @@ import { RootState } from "../redux/store";
 import { setUserData } from "../services/firebaseServices";
 import { ICreatorsData } from "./HomeScreen";
 import { ErrorComponent } from "../components/ErrorComponent";
+import { setCreatorsImages } from "../redux/actions/localDataActions";
 
 interface IRenderItem {
   item?: any;
   callback?: (value: string[]) => void;
 }
 
-const initialState: ICreatorsData = {
+export const initialState: ICreatorsData = {
   description: "",
   email: "",
   expertise: "",
   id: "",
   name: "",
   profileImage: "",
-  images: ["file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg", "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg" ],
+  images: [
+    "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg",
+    "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg",
+  ],
   socialMedia: {
     facebook: "",
     instagram: "",
@@ -73,9 +77,10 @@ const RenderDefaultItem: FC<IRenderItem> = ({ item }: any) => {
   );
 };
 
-const RenderPickImagesItem: FC<IRenderItem> = ({ item,  callback}) => {
-  const [images, setImages] = useState<string[]>(initialState.images);
+const RenderPickImagesItem: FC<IRenderItem> = ({ item, callback }) => {
+  const dispatch = useDispatch();
   let tempArray: string[];
+  //  const images = useSelector((state: RootState) => state.localData.creatorImage);
 
   const pickImages = async () => {
     // No permissions request is necessary for launching the image library
@@ -86,31 +91,29 @@ const RenderPickImagesItem: FC<IRenderItem> = ({ item,  callback}) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
-      setImages([...images, result.uri]);
-      console.log('TAG images picked: ', result.uri)
-      //onFormItemChange("profileImage", result.uri)
-    };
+    if (result.cancelled) return;
+    // setImages([...images, result.uri]);
+    if (result?.uri) dispatch(setCreatorsImages(result.uri));
+    //console.log('TAG images picked: ', result.uri)
+    //onFormItemChange("profileImage", result.uri)
   };
 
-  useEffect(() => {
-    console.log('TAG IMAGES: ', images);
-    
-    if(callback) {
-      console.log('TAG ...images: ', [...images]);
-      
-      callback([...images]);
-    };
-  }, [images]);
+  // useEffect(() => {
+  //   //console.log("TAG IMAGES: ", images);
 
+  //   if (callback) {
+  //     //console.log("TAG ...images: ", [...images]);
 
+  //     callback([...images]);
+  //   }
+  // }, [images]);
 
   return (
     <View style={styles.flatlistContainer}>
       <ImageBackground
         style={styles.flatlistImage}
         resizeMode={"cover"}
-        source={{uri: item}}
+        source={{ uri: item }}
       >
         <LinearGradient
           colors={["#00000000", "#000000"]}
@@ -139,17 +142,18 @@ const CreatorsScreen = (props: any) => {
     : "";
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-  const userLocation = useSelector(
-    (state: RootState) => state.localData.userLocation
+  const userLocation = useSelector((state: RootState) => console.log('TAG user location: ', state.localData.userLocation) );
+  const images = useSelector(
+    (state: RootState) => state.localData.creatorImage
   );
+  const imageFallback = images.length ? images : initialState.images;
   const creatorData = props.route.params.creatorData
     ? props.route.params.creatorData
     : undefined;
   const [formValues, setFormValues] = useState<ICreatorsData>(
     creatorsData ? creatorsData : initialState
   );
-  const [test, setTest] = useState(false);
-  const [image, setImage] = useState<string>();
+  const [test, setTest] = useState(true);
 
   const setUserDataToFS = (id: string, data: ICreatorsData) =>
     setUserData(id, data);
@@ -170,24 +174,25 @@ const CreatorsScreen = (props: any) => {
       quality: 1,
     });
 
-    console.log('TAG RESULT: ', result);
+    //console.log("TAG RESULT: ", result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
-      onFormItemChange("profileImage", result.uri)
+      onFormItemChange("profileImage", result.uri);
     }
   };
 
   useEffect(() => {
     //console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
-    console.log('TAG formValues.images: ', formValues.images);
-    
-    
-  }, [formValues])
+    //console.log("TAG formValues.images: ", formValues.images);
+  }, [formValues]);
 
   useEffect(() => {
     if (userLocation) {
       onFormItemChange("userLocation", userLocation);
+      console.log('TAG user lcation is true');
+      
+      setTest(false);
+    } else {
       setTest(true);
     }
   }, [userLocation]);
@@ -337,8 +342,15 @@ const CreatorsScreen = (props: any) => {
 
       <View style={{ flex: 3, alignItems: "center" }}>
         <FlatList
-          data={creatorsData ? formValues.images : formValues.images}
-          renderItem={({ item }) => <RenderPickImagesItem item={item} callback={([...value]: string[]) => onFormItemChange("images", [...value])}/>}
+          data={imageFallback}
+          renderItem={({ item }) => (
+            <RenderPickImagesItem
+              item={item}
+              callback={([...value]: string[]) =>
+                onFormItemChange("images", [...value])
+              }
+            />
+          )}
           //callback={(order, choice) => setSchedueleChoice(order,choice)}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -356,16 +368,16 @@ const CreatorsScreen = (props: any) => {
         {creatorsData ? (
           <Paginator data={creatorsData.images} scrollX={scrollX} />
         ) : (
-          <Paginator data={formValues.images} scrollX={scrollX} />
+          <Paginator data={imageFallback} scrollX={scrollX} />
         )}
       </View>
 
       <Button
-        disabled={test ? true : false}
+        disabled={test}
         style={styles.button}
         mode={"contained"}
         onPress={() => {
-          setUserDataToFS(userId, formValues);
+          setUserDataToFS(userId, { ...formValues, images });
           props.route.params.navigation.navigate("ProfileScreen");
         }}
       >

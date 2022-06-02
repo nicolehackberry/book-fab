@@ -1,10 +1,14 @@
-import { fetchDataFromFS, getCurrentLogedInUser } from "../../services/firebaseServices";
+import {
+  fetchDataFromFS,
+  getCurrentLogedInUser,
+} from "../../services/firebaseServices";
 
 export const VIEW_ON_BOARDING = "IS_FIRST_TIME_USER";
 export const LOCATIONS_FROM_FS = "LOCATIONS_FROM_FS";
 export const UAE_USER_LOCATION = "UAE_USER_LOCATION";
 export const USER_DATA = "USER_DATA";
-export const USER_LOCATION = 'USER_LOCATION';
+export const USER_LOCATION = "USER_LOCATION";
+export const CREATORS_IMAGES = "CREATORS_IMAGES";
 
 export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   type: VIEW_ON_BOARDING,
@@ -32,7 +36,7 @@ export const useCurrentUserLocation = (permissionIsGranted: string) => {
 export const userLocation = (lat: number, long: number) => {
   const userLocation = {
     latitude: lat,
-    longitude: long
+    longitude: long,
   };
 
   return {
@@ -49,5 +53,13 @@ export const fetchCurrentUserData = () => {
       type: USER_DATA,
       payload: data,
     });
+  };
+};
+
+export const setCreatorsImages = (image: string) => {
+  
+  return {
+    type: CREATORS_IMAGES,
+    payload: image,
   };
 };
