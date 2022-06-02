@@ -33,7 +33,7 @@ const navOptions = {
   gestureEnabled: false,
   headerHideShadow: true,
   headerMode: "float",
-  headerTitle: () => <Text>Book Fab</Text>,
+  headerTitle: () => <Text style={{ color: primaryColor, fontFamily: "PinyonScript_400Regular", fontSize: 32 }}>Book Fab</Text>,
 };
 
 const Navigation = () => (
