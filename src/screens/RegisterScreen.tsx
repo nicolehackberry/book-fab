@@ -97,7 +97,6 @@ export const RegisterScreen: FC<INav> = ({ navigation }) => {
           } else {
             navigation.navigate("ProfileScreen");
             console.log('Did not create account');
-            
           }
         }}
       >

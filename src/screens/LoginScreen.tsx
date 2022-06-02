@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: "column",
-    // marginBottom: 10,
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 10,

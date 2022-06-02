@@ -78,11 +78,8 @@ const RenderDefaultItem: FC<IRenderItem> = ({ item }: any) => {
 
 const RenderPickImagesItem: FC<IRenderItem> = ({ item, callback }) => {
   const dispatch = useDispatch();
-  let tempArray: string[];
-  //  const images = useSelector((state: RootState) => state.localData.creatorImage);
 
   const pickImages = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -91,21 +88,8 @@ const RenderPickImagesItem: FC<IRenderItem> = ({ item, callback }) => {
     });
 
     if (result.cancelled) return;
-    // setImages([...images, result.uri]);
     if (result?.uri) dispatch(setCreatorsImages(result.uri));
-    //console.log('TAG images picked: ', result.uri)
-    //onFormItemChange("profileImage", result.uri)
   };
-
-  // useEffect(() => {
-  //   //console.log("TAG IMAGES: ", images);
-
-  //   if (callback) {
-  //     //console.log("TAG ...images: ", [...images]);
-
-  //     callback([...images]);
-  //   }
-  // }, [images]);
 
   return (
     <View style={styles.flatlistContainer}>
@@ -121,7 +105,6 @@ const RenderPickImagesItem: FC<IRenderItem> = ({ item, callback }) => {
           <TouchableOpacity
             style={{ alignItems: "center" }}
             onPress={() => {
-              console.log("TAG pressing 1");
               pickImages();
             }}
           >
@@ -141,7 +124,9 @@ const CreatorsScreen = (props: any) => {
     : "";
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-  const userLocation = useSelector((state: RootState) => state.localData.userLocation);
+  const userLocation = useSelector(
+    (state: RootState) => state.localData.userLocation
+  );
   const images = useSelector(
     (state: RootState) => state.localData.creatorImage
   );
@@ -165,7 +150,6 @@ const CreatorsScreen = (props: any) => {
   };
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -173,27 +157,15 @@ const CreatorsScreen = (props: any) => {
       quality: 1,
     });
 
-    //console.log("TAG RESULT: ", result);
-
     if (!result.cancelled) {
       onFormItemChange("profileImage", result.uri);
     }
   };
 
   useEffect(() => {
-    console.log('TAG lyssnar på creator data: ', creatorsData);
-    console.log('TAG userID: ', userId);
-    
-    
-    //console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
-    //console.log("TAG formValues.images: ", formValues.images);
-  }, [creatorsData, userId]);
-
-  useEffect(() => {
     if (userLocation) {
       onFormItemChange("userLocation", userLocation);
-      console.log('TAG user lcation is true');
-      
+
       setTest(false);
     } else {
       setTest(true);
@@ -288,7 +260,6 @@ const CreatorsScreen = (props: any) => {
             style={{ alignItems: "center" }}
             onPress={() => {
               pickImage();
-              console.log("TAG pressing 1");
             }}
           >
             <Text style={{ color: "white" }}>Add profile image</Text>
@@ -354,7 +325,6 @@ const CreatorsScreen = (props: any) => {
               }
             />
           )}
-          //callback={(order, choice) => setSchedueleChoice(order,choice)}
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled

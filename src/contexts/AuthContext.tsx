@@ -28,7 +28,6 @@ export const AuthContextProvider: FC = (props) => {
             }
         } else {
             alert("Wrong username/password")
-            // loginState(false)
         }
     }
 
@@ -38,7 +37,6 @@ export const AuthContextProvider: FC = (props) => {
 
     const logOut = async () => {
         await signOutUser();
-        //console.log('TGATATGATAGTAG: ', signOutUser());
         
         setIsUserSignedIn(false);
     };

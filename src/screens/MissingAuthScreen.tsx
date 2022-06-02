@@ -19,7 +19,6 @@ const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
             color={"#ffebee"}
             mode={"contained"}
             onPress={() => {
-              console.log("Btn pressed? ");
               navigation.navigate("LoginScreen");
             }}
           >
@@ -29,7 +28,6 @@ const MissingAuthScreen: FC<IMissingAuthScreen> = ({ navigation }) => {
             color={primaryColor}
             mode={"contained"}
             onPress={() => {
-              console.log("Btn pressed? ");
               navigation.navigate("RegisterScreen", {
                 navigation: navigation,
               });

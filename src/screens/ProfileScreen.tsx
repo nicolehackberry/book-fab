@@ -10,12 +10,8 @@ import {
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 
 import { AuthContext } from "../contexts/AuthContext";
-import {
-  getCurrentLogedInUser,
-  getCurrentUserData,
-} from "../services/firebaseServices";
+import { getCurrentLogedInUser } from "../services/firebaseServices";
 import { primaryColor } from "../utils/Colors";
-import { ICreatorsData } from "./HomeScreen";
 import MissingAuthScreen from "./MissingAuthScreen";
 
 interface IProfileScreen {
@@ -35,7 +31,6 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 }) => {
   const authContext = useContext(AuthContext);
   const authStatus = authContext?.isUserSignedIn;
-  console.log("TAG AUTH STATUS: ", authStatus);
 
   if (authStatus === false)
     return <MissingAuthScreen navigation={navigation} />;
@@ -45,32 +40,14 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   const authContext = useContext(AuthContext);
   const [userData, setUserData] = useState<User>();
-  const [userEmail, setUserEmail] = useState<String>();
-  const [fsData, setFsData] = useState<ICreatorsData | null>();
 
   const fetchCurrentUserData = async () => {
     const data = await getCurrentLogedInUser();
 
     if (data) {
-      //console.log('VAH? data: ', data);
       setUserData(data);
     }
   };
-
-  const fecthCurrentUserData = async (docName: string | null) => {
-    console.log(
-      "TAG FIRESTORE data of a user: ",
-      await getCurrentUserData(docName)
-    );
-    console.log("TAG kommer vi hit?");
-  };
-
-  useEffect(() => {
-    if (userData) {
-      console.log("TAG lyssnar på user data: ", userData.providerData[0].email);
-      fecthCurrentUserData(userData.providerData[0].email);
-    }
-  }, [userData]);
 
   useEffect(() => {
     fetchCurrentUserData();
@@ -148,12 +125,12 @@ const styles = StyleSheet.create({
   },
   item: {
     margin: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     height: 60,
     justifyContent: "center",
   },
   text: {
-    paddingLeft: 32
-  }
+    paddingLeft: 32,
+  },
 });

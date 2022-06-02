@@ -40,8 +40,6 @@ const LocationFetcher: FC<ILocation> = ({ setLocation }) => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log('TAG location: ', location);
-    
     dispatch(userLocation(location.coords.latitude, location.coords.longitude));
     setLocation(location);
     setLocationInternal(location);

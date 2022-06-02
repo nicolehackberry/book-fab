@@ -107,15 +107,6 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
     isUserLocationPermissionGranted();
   }, []);
 
-  const coordinates = useSelector((state: RootState) => state.localData.userLocation);
-
-  useEffect(() => {
-    console.log('TAG lyssnar på location: ', location);
-    
-  }, [location]);
-
-
-
   return (
     creatorsLocations && (
       <View style={styles.container}>
@@ -132,7 +123,6 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
               onRegionChange={onRegionChange}
               showsUserLocation={useUserLocation === "true" ? true : false}
               onUserLocationChange={(e) => {
-                console.log('TAG user location on changed: ', location);
                 
                 if (useUserLocation) {
                   dispatch(
@@ -141,11 +131,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                       location.coords.longitude
                     )
                   );
-                }
-                // console.log(
-                //   "TAG on user location change: ",
-                //   e.nativeEvent.coordinate
-                // );
+                };
               }}
             >
               {creatorsLocations.map((item: ICreatorsData, index: number) => (

@@ -1,4 +1,4 @@
-import * as CreatorsScreen  from "../../screens/CreatorsScreen";
+import * as CreatorsScreen from "../../screens/CreatorsScreen";
 import {
   VIEW_ON_BOARDING,
   LOCATIONS_FROM_FS,
@@ -6,8 +6,8 @@ import {
   USER_DATA,
   USER_LOCATION,
   CREATORS_IMAGES,
+  CURRENT_CREATOR_DATA_FS,
 } from "../actions/localDataActions";
-
 
 const initialState = {
   viewOnBoarding: null,
@@ -18,6 +18,7 @@ const initialState = {
   currentUser: null,
   userLocation: null,
   creatorImage: [],
+  currentCreatorData: null,
 };
 
 export const localDataReducer = (state = initialState, action: any) => {
@@ -52,6 +53,11 @@ export const localDataReducer = (state = initialState, action: any) => {
       return {
         ...state,
         creatorImage: [...state.creatorImage, image],
+      };
+    case CURRENT_CREATOR_DATA_FS:
+      return {
+        ...state,
+        currentCreatorData: action.payload,
       };
 
     default:

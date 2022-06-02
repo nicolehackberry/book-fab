@@ -1,3 +1,5 @@
+import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore/lite";
+import { ICreatorsData } from "../../screens/HomeScreen";
 import {
   fetchDataFromFS,
   getCurrentLogedInUser,
@@ -9,6 +11,7 @@ export const UAE_USER_LOCATION = "UAE_USER_LOCATION";
 export const USER_DATA = "USER_DATA";
 export const USER_LOCATION = "USER_LOCATION";
 export const CREATORS_IMAGES = "CREATORS_IMAGES";
+export const CURRENT_CREATOR_DATA_FS = 'CURRENT_CREATOR_DATA_FS';
 
 export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   type: VIEW_ON_BOARDING,
@@ -57,9 +60,15 @@ export const fetchCurrentUserData = () => {
 };
 
 export const setCreatorsImages = (image: string) => {
-  
   return {
     type: CREATORS_IMAGES,
     payload: image,
   };
 };
+
+export const setCurrentCreatorDataFS = (data: DocumentData) => {
+  return {
+    type: CURRENT_CREATOR_DATA_FS,
+    payload: data,
+  };
+}

@@ -5,7 +5,6 @@ import {
   setDoc,
   doc,
   getFirestore,
-  where,
   getDoc,
 } from "firebase/firestore/lite";
 import {
@@ -16,7 +15,6 @@ import {
   User,
   UserCredential,
 } from "firebase/auth";
-import { onSnapshot } from "firebase/firestore";
 
 import { ICreatorsData } from "../screens/HomeScreen";
 
@@ -108,24 +106,14 @@ export const signOutUser = async () => {
 };
 
 export const getCurrentUserData = async (fsDocumentName: any) => {
-  console.log("TAG TAG TAG: ", fsDocumentName);
   const db = getFirestore();
-  //import { doc, onSnapshot } from "firebase/firestore";
+  const docRefQuestions = doc(db, "creatorData", fsDocumentName);
+  const docSnap = await getDoc(docRefQuestions);
 
-  onSnapshot(doc(db, "creatorData"), (doc) => {
-    console.log("Current data: ", doc.data());
-  });
-
-  const query = doc(db, "creatorData", fsDocumentName);
-  const data = await getDoc(query);
-
-  if (data.exists()) {
-    console.log("TAGVSJVSJHABJS: ", data.data());
-
-    return data.data();
+  if (docSnap.exists()) {
+    return docSnap.data();
   } else {
-    console.log("TAGVSJVSJHABJS: ", data.data());
-    return data.data();
+    return docSnap.data();
   }
 };
 
