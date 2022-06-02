@@ -5,12 +5,15 @@ import Device from "expo-device";
 import * as Location from "expo-location";
 
 import { LocationObject } from "expo-location";
+import { userLocation } from "../redux/actions/localDataActions";
+import { useDispatch } from "react-redux";
 
 interface ILocation extends React.HTMLProps<HTMLCollection> {
   setLocation: (location: LocationObject) => void;
 }
 
 const LocationFetcher: FC<ILocation> = ({ setLocation }) => {
+  const dispatch = useDispatch();
   const [locationInternal, setLocationInternal] = useState<LocationObject>();
   const [errorMsg, setErrorMsg] = useState<string>();
 
@@ -37,6 +40,9 @@ const LocationFetcher: FC<ILocation> = ({ setLocation }) => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
+    console.log('TAG location: ', location);
+    
+    dispatch(userLocation(location.coords.latitude, location.coords.longitude));
     setLocation(location);
     setLocationInternal(location);
     setUserLocationPermission("true");

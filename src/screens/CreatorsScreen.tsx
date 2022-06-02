@@ -39,7 +39,6 @@ export const initialState: ICreatorsData = {
   profileImage: "",
   images: [
     "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg",
-    "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg",
   ],
   socialMedia: {
     facebook: "",
@@ -142,7 +141,7 @@ const CreatorsScreen = (props: any) => {
     : "";
   const scrollX = useRef(new Animated.Value(0)).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
-  const userLocation = useSelector((state: RootState) => console.log('TAG user location: ', state.localData.userLocation) );
+  const userLocation = useSelector((state: RootState) => state.localData.userLocation);
   const images = useSelector(
     (state: RootState) => state.localData.creatorImage
   );
