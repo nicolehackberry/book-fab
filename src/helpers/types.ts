@@ -3,6 +3,8 @@ export type StackScreens = {
     TabsNavigator: undefined;
     LoadingScreen: undefined;
     CreatorsScreen: undefined;
+    RegisterScreen: undefined;
+    LoginScreen: undefined;
 }
 
 export type TabsScreens = {

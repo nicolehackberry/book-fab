@@ -12,8 +12,6 @@ interface IMapMarker {
 };
 
 const MapMarker: FC<IMapMarker> = ({ data, navigation }) => {
-  console.log('TAG DATATATTA: ', data);
-  
   return (
     <Marker
       coordinate={{

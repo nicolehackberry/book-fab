@@ -1,29 +1,74 @@
-import { fetchDataFromFS } from "../../services/firebaseServices";
+import { QueryDocumentSnapshot, DocumentData } from "firebase/firestore/lite";
+import { ICreatorsData } from "../../screens/HomeScreen";
+import {
+  fetchDataFromFS,
+  getCurrentLogedInUser,
+} from "../../services/firebaseServices";
 
-export const VIEW_ON_BOARDING = 'IS_FIRST_TIME_USER';
-export const LOCATIONS_FROM_FS = 'LOCATIONS_FROM_FS';
-export const UAE_USER_LOCATION = 'UAE_USER_LOCATION';
-
+export const VIEW_ON_BOARDING = "IS_FIRST_TIME_USER";
+export const LOCATIONS_FROM_FS = "LOCATIONS_FROM_FS";
+export const UAE_USER_LOCATION = "UAE_USER_LOCATION";
+export const USER_DATA = "USER_DATA";
+export const USER_LOCATION = "USER_LOCATION";
+export const CREATORS_IMAGES = "CREATORS_IMAGES";
+export const CURRENT_CREATOR_DATA_FS = 'CURRENT_CREATOR_DATA_FS';
 
 export const viewedOnboarding = (viewOnBoarding: boolean) => ({
   type: VIEW_ON_BOARDING,
-  payload: viewOnBoarding
+  payload: viewOnBoarding,
 });
 
 export const getCreatorsDataFS = () => {
   return async (dispatch: any) => {
-      const fsData = await fetchDataFromFS();
+    const fsData = await fetchDataFromFS();
 
-          dispatch ({
-              type: LOCATIONS_FROM_FS,
-              payload: fsData
-          });
-      };
+    dispatch({
+      type: LOCATIONS_FROM_FS,
+      payload: fsData,
+    });
+  };
 };
 
 export const useCurrentUserLocation = (permissionIsGranted: string) => {
   return {
     type: UAE_USER_LOCATION,
-    payload: permissionIsGranted
+    payload: permissionIsGranted,
   };
 };
+
+export const userLocation = (lat: number, long: number) => {
+  const userLocation = {
+    latitude: lat,
+    longitude: long,
+  };
+
+  return {
+    type: USER_LOCATION,
+    payload: userLocation,
+  };
+};
+
+export const fetchCurrentUserData = () => {
+  return async (dispatch: any) => {
+    const data = await getCurrentLogedInUser();
+
+    dispatch({
+      type: USER_DATA,
+      payload: data,
+    });
+  };
+};
+
+export const setCreatorsImages = (image: string) => {
+  return {
+    type: CREATORS_IMAGES,
+    payload: image,
+  };
+};
+
+export const setCurrentCreatorDataFS = (data: DocumentData) => {
+  return {
+    type: CURRENT_CREATOR_DATA_FS,
+    payload: data,
+  };
+}

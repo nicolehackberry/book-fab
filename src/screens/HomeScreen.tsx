@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Button, Text} from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import {
   viewedOnboarding,
   getCreatorsDataFS,
   useCurrentUserLocation,
+  userLocation,
 } from "../redux/actions/localDataActions";
 import { RootState } from "../redux/store";
 import MapMarker from "../components/MapMarker";
@@ -21,22 +22,24 @@ interface IHomeScreen {
 }
 
 export interface ICreatorsData {
-    description: string;
-    email: string;
-    expertise: string;
-    id: string;
-    name: string;
-    socialMedia: {
-      facebook: string;
-      instagram: string;
-      tiktok: string;
-    };
-    test: boolean;
-    userLocation: {
-      latitude: number;
-      longitude: number;
-    };
-};
+  description: string;
+  email: string;
+  expertise: string;
+  id: string;
+  name: string;
+  profileImage: string;
+  images: string[];
+  socialMedia: {
+    facebook: string;
+    instagram: string;
+    tiktok: string;
+  };
+  test: boolean;
+  userLocation: {
+    latitude: number;
+    longitude: number;
+  };
+}
 
 interface IInitialRegion {
   latitude: number;
@@ -57,7 +60,9 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const creatorsLocations = useSelector(
     (state: RootState) => state.localData.creatorLocations
   );
-  const useUserLocation = useSelector((state: RootState) => state.localData.useUserLocation);
+  const useUserLocation = useSelector(
+    (state: RootState) => state.localData.useUserLocation
+  );
   const [location, setLocation] = useState<LocationObject>();
   const [regionOnChange, setRegionOnChange] =
     useState<IInitialRegion>(initialRegion);
@@ -116,34 +121,32 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                 longitudeDelta: 0.0221,
               }}
               onRegionChange={onRegionChange}
-              showsUserLocation={useUserLocation === 'true' ? true : false}
+              showsUserLocation={useUserLocation === "true" ? true : false}
               onUserLocationChange={(e) => {
-                // console.log(
-                //   "TAG on user location change: ",
-                //   e.nativeEvent.coordinate
-                // );
-                setPin(e.nativeEvent.coordinate);
+                
+                if (useUserLocation) {
+                  dispatch(
+                    userLocation(
+                      location.coords.latitude,
+                      location.coords.longitude
+                    )
+                  );
+                };
               }}
             >
-              {creatorsLocations.map(
-                (item: ICreatorsData, index: number) => (
-                  <MapMarker key={index} data={item} navigation={navigation} />
-                )
-              )}
-
-              {/* <View style={{ height: 300, width: 300, backgroundColor: 'purple' }}><Text>Testar denna div</Text></View> */}
+              {creatorsLocations.map((item: ICreatorsData, index: number) => (
+                <MapMarker key={index} data={item} navigation={navigation} />
+              ))}
             </MapView>
           </>
         ) : (
-          <>
             <LoadingScreen />
-          </>
         )}
 
         <LocationFetcher
           setLocation={(value: LocationObject) => setLocation(value)}
         />
-        <Button title="Press Me!" onPress={clearOnboarding} />
+        {/* <Button title="Press Me!" onPress={clearOnboarding} /> */}
       </View>
     )
   );
@@ -153,14 +156,13 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
+    flex: 1,
     justifyContent: "center",
-    height: 500,
   },
   map: {
-    padding: 15,
     justifyContent: "center",
-    height: 700,
     backgroundColor: "purple",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
 });

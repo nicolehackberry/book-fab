@@ -16,6 +16,8 @@ import { viewedOnboarding } from "../redux/actions/localDataActions";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { TabsNavigator } from "./TabsNavigator";
 import CreatorsScreen from "../screens/CreatorsScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 export const RootStack = createNativeStackNavigator<StackScreens>();
 
@@ -31,13 +33,15 @@ const navOptions = {
   gestureEnabled: false,
   headerHideShadow: true,
   headerMode: "float",
-  headerTitle: () => <Text>Book Fab</Text>,
+  headerTitle: () => <Text style={{ color: primaryColor, fontFamily: "PinyonScript_400Regular", fontSize: 32 }}>Book Fab</Text>,
 };
 
 const Navigation = () => (
   <RootStack.Navigator screenOptions={navOptions}>
     <RootStack.Screen name="TabsNavigator" component={TabsNavigator} />
     <RootStack.Screen name="CreatorsScreen" component={CreatorsScreen} />
+    <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+    <RootStack.Screen name="LoginScreen" component={LoginScreen} />
   </RootStack.Navigator>
 );
 
