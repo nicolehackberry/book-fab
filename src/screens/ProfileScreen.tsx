@@ -56,16 +56,16 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     }
   };
 
-  // const fecthCurrentUserData = async (docName: string | null) => {
-  //   console.log('TAG FIRESTORE data of a user: ', await getCurrentUserData(docName));
-  //   console.log('TAG kommer vi hit?');
+  const fecthCurrentUserData = async (docName: string | null) => {
+    console.log('TAG FIRESTORE data of a user: ', await getCurrentUserData(docName));
+    console.log('TAG kommer vi hit?');
 
-  // };
+  };
 
   useEffect(() => {
     if (userData) {
       console.log("TAG lyssnar på user data: ", userData.providerData[0].email);
-      //fecthCurrentUserData(userData.providerData[0].email);
+      fecthCurrentUserData(userData.providerData[0].email);
     }
   }, [userData]);
 

@@ -154,9 +154,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
             </MapView>
           </>
         ) : (
-          <>
             <LoadingScreen />
-          </>
         )}
 
         <LocationFetcher
@@ -172,6 +170,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: "center",
   },
   map: {

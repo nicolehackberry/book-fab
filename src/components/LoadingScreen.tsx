@@ -1,10 +1,11 @@
 import React, { FC } from "react";
 import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { primaryColor } from "../utils/Colors";
 
 export const LoadingScreen: FC = () => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="gray" />
+      <ActivityIndicator size="large" color={primaryColor} />
     </View>
   );
 };

@@ -181,9 +181,13 @@ const CreatorsScreen = (props: any) => {
   };
 
   useEffect(() => {
+    console.log('TAG lyssnar på creator data: ', creatorsData);
+    console.log('TAG userID: ', userId);
+    
+    
     //console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
     //console.log("TAG formValues.images: ", formValues.images);
-  }, [formValues]);
+  }, [creatorsData, userId]);
 
   useEffect(() => {
     if (userLocation) {
