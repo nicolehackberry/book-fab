@@ -26,6 +26,7 @@ import { ErrorComponent } from "../components/ErrorComponent";
 
 interface IRenderItem {
   item?: any;
+  callback?: (value: string[]) => void;
 }
 
 const initialState: ICreatorsData = {
@@ -35,7 +36,7 @@ const initialState: ICreatorsData = {
   id: "",
   name: "",
   profileImage: "",
-  images: [require("../assets/nailstwo.jpg")],
+  images: ["file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg", "file:///var/mobile/Containers/Data/Application/31879708-644B-46D8-A045-D4DECCA81508/Library/Caches/ExponentExperienceData/%2540xloopez%252Fbook-fab/ImagePicker/41442699-1948-4C81-AA43-1699B208E328.jpg" ],
   socialMedia: {
     facebook: "",
     instagram: "",
@@ -72,13 +73,44 @@ const RenderDefaultItem: FC<IRenderItem> = ({ item }: any) => {
   );
 };
 
-const RenderPickImagesItem: FC<IRenderItem> = ({ item }: any) => {
+const RenderPickImagesItem: FC<IRenderItem> = ({ item,  callback}) => {
+  const [images, setImages] = useState<string[]>(initialState.images);
+  let tempArray: string[];
+
+  const pickImages = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setImages([...images, result.uri]);
+      console.log('TAG images picked: ', result.uri)
+      //onFormItemChange("profileImage", result.uri)
+    };
+  };
+
+  useEffect(() => {
+    console.log('TAG IMAGES: ', images);
+    
+    if(callback) {
+      console.log('TAG ...images: ', [...images]);
+      
+      callback([...images]);
+    };
+  }, [images]);
+
+
+
   return (
     <View style={styles.flatlistContainer}>
       <ImageBackground
         style={styles.flatlistImage}
         resizeMode={"cover"}
-        source={item}
+        source={{uri: item}}
       >
         <LinearGradient
           colors={["#00000000", "#000000"]}
@@ -88,6 +120,7 @@ const RenderPickImagesItem: FC<IRenderItem> = ({ item }: any) => {
             style={{ alignItems: "center" }}
             onPress={() => {
               console.log("TAG pressing 1");
+              pickImages();
             }}
           >
             <Text style={{ color: "white" }}>Add Images</Text>
@@ -146,7 +179,9 @@ const CreatorsScreen = (props: any) => {
   };
 
   useEffect(() => {
-    console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
+    //console.log('TAG LYSSNAR PÅ FORM VALUES: ', formValues);
+    console.log('TAG formValues.images: ', formValues.images);
+    
     
   }, [formValues])
 
@@ -303,7 +338,8 @@ const CreatorsScreen = (props: any) => {
       <View style={{ flex: 3, alignItems: "center" }}>
         <FlatList
           data={creatorsData ? formValues.images : formValues.images}
-          renderItem={({ item }) => <RenderPickImagesItem item={item} />}
+          renderItem={({ item }) => <RenderPickImagesItem item={item} callback={([...value]: string[]) => onFormItemChange("images", [...value])}/>}
+          //callback={(order, choice) => setSchedueleChoice(order,choice)}
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
@@ -320,12 +356,12 @@ const CreatorsScreen = (props: any) => {
         {creatorsData ? (
           <Paginator data={creatorsData.images} scrollX={scrollX} />
         ) : (
-          <></>
+          <Paginator data={formValues.images} scrollX={scrollX} />
         )}
       </View>
 
       <Button
-        disabled={test ? false : true}
+        disabled={test ? true : false}
         style={styles.button}
         mode={"contained"}
         onPress={() => {

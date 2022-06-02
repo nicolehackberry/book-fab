@@ -94,6 +94,10 @@ export const RegisterScreen: FC<INav> = ({ navigation }) => {
           authContext?.login(registerState.displayName, registerState.password);
           if (authContext?.isUserSignedIn) {
             navigation.navigate("ProfileScreen");
+          } else {
+            navigation.navigate("ProfileScreen");
+            console.log('Did not create account');
+            
           }
         }}
       >

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View, Dimensions} from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import { NativeStackNavigationProp } from "react-native-screens/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,24 +22,24 @@ interface IHomeScreen {
 }
 
 export interface ICreatorsData {
-    description: string;
-    email: string;
-    expertise: string;
-    id: string;
-    name: string;
-    profileImage: string;
-    images: string[];
-    socialMedia: {
-      facebook: string;
-      instagram: string;
-      tiktok: string;
-    };
-    test: boolean;
-    userLocation: {
-      latitude: number;
-      longitude: number;
-    };
-};
+  description: string;
+  email: string;
+  expertise: string;
+  id: string;
+  name: string;
+  profileImage: string;
+  images: string[];
+  socialMedia: {
+    facebook: string;
+    instagram: string;
+    tiktok: string;
+  };
+  test: boolean;
+  userLocation: {
+    latitude: number;
+    longitude: number;
+  };
+}
 
 interface IInitialRegion {
   latitude: number;
@@ -60,7 +60,9 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
   const creatorsLocations = useSelector(
     (state: RootState) => state.localData.creatorLocations
   );
-  const useUserLocation = useSelector((state: RootState) => state.localData.useUserLocation);
+  const useUserLocation = useSelector(
+    (state: RootState) => state.localData.useUserLocation
+  );
   const [location, setLocation] = useState<LocationObject>();
   const [regionOnChange, setRegionOnChange] =
     useState<IInitialRegion>(initialRegion);
@@ -119,13 +121,16 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                 longitudeDelta: 0.0221,
               }}
               onRegionChange={onRegionChange}
-              showsUserLocation={useUserLocation === 'true' ? true : false}
+              showsUserLocation={useUserLocation === "true" ? true : false}
               onUserLocationChange={(e) => {
-                if(useUserLocation) {
-                  dispatch(userLocation(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude))
-
-                  
-                };
+                if (useUserLocation) {
+                  dispatch(
+                    userLocation(
+                      e.nativeEvent.coordinate.latitude,
+                      e.nativeEvent.coordinate.longitude
+                    )
+                  );
+                }
                 // console.log(
                 //   "TAG on user location change: ",
                 //   e.nativeEvent.coordinate
@@ -133,11 +138,9 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
                 setPin(e.nativeEvent.coordinate);
               }}
             >
-              {creatorsLocations.map(
-                (item: ICreatorsData, index: number) => (
-                  <MapMarker key={index} data={item} navigation={navigation} />
-                )
-              )}
+              {creatorsLocations.map((item: ICreatorsData, index: number) => (
+                <MapMarker key={index} data={item} navigation={navigation} />
+              ))}
             </MapView>
           </>
         ) : (
@@ -160,7 +163,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
-
   },
   map: {
     justifyContent: "center",

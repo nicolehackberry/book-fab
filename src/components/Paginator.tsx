@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { StyleSheet, View, Animated, useWindowDimensions } from "react-native";
 
 interface IPaginator {
-  data: {image: any}[];
+  data: string[];
   scrollX: Animated.Value;
 }
 
