@@ -14,6 +14,7 @@ import {
   getCurrentLogedInUser,
   getCurrentUserData,
 } from "../services/firebaseServices";
+import { primaryColor } from "../utils/Colors";
 import { ICreatorsData } from "./HomeScreen";
 import MissingAuthScreen from "./MissingAuthScreen";
 
@@ -34,10 +35,10 @@ const ProtectedItems: React.FC<IProtectedItems> = ({
 }) => {
   const authContext = useContext(AuthContext);
   const authStatus = authContext?.isUserSignedIn;
-  console.log('TAG AUTH STATUS: ', authStatus);
-  
+  console.log("TAG AUTH STATUS: ", authStatus);
 
-  if (authStatus === false) return <MissingAuthScreen navigation={navigation} />;
+  if (authStatus === false)
+    return <MissingAuthScreen navigation={navigation} />;
   return <>{children || null}</>;
 };
 
@@ -57,9 +58,11 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   };
 
   const fecthCurrentUserData = async (docName: string | null) => {
-    console.log('TAG FIRESTORE data of a user: ', await getCurrentUserData(docName));
-    console.log('TAG kommer vi hit?');
-
+    console.log(
+      "TAG FIRESTORE data of a user: ",
+      await getCurrentUserData(docName)
+    );
+    console.log("TAG kommer vi hit?");
   };
 
   useEffect(() => {
@@ -87,7 +90,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
       <View style={styles.button}></View>
 
       <TouchableOpacity
-        style={[styles.button]}
+        style={[styles.item]}
         onPress={() => {
           fetchCurrentUserData();
 
@@ -95,25 +98,24 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
             navigation.navigate("CreatorsScreen", {
               isProfile: true,
               docID: userData,
-              navigation: navigation
+              navigation: navigation,
             });
           }
-          //console.log("TAG pressing Profile");
         }}
       >
-        <Text>Profile</Text>
+        <Text style={[styles.text, { color: primaryColor }]}>Profile</Text>
       </TouchableOpacity>
 
       <View style={[styles.button, { flex: 3 }]}></View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[styles.button]}
         onPress={() => {
           console.log("TAG pressing 1");
         }}
       >
         <Text>Contact us</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         style={[styles.button]}
@@ -121,16 +123,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
           authContext?.logOut();
         }}
       >
-        <Text>Logout</Text>
+        <Text style={[styles.text, { color: primaryColor }]}>Logout</Text>
       </TouchableOpacity>
       <View style={styles.button}></View>
-
-      {/* <Button
-          title="Press Me!"
-          onPress={() => {
-            navigation.navigate("HomeScreen");
-          }}
-        /> */}
     </ProtectedItems>
   );
 };
@@ -151,4 +146,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 60,
   },
+  item: {
+    margin: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    height: 60,
+    justifyContent: "center",
+  },
+  text: {
+    paddingLeft: 32
+  }
 });
